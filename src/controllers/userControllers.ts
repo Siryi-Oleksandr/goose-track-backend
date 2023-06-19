@@ -1,8 +1,8 @@
 import { Response } from "express";
 
-// *******************  /api/users  ******************
+// ******************* API:  /users  ******************
 
-//* POST api/users/signup
+//* POST /users/signup
 const signup = async (_req: any, res: Response) => {
   res.status(201).json("created successfully");
 };

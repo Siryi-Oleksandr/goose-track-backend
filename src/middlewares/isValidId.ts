@@ -3,9 +3,9 @@ import { isValidObjectId } from "mongoose";
 import { HttpError } from "../helpers";
 
 const isValidId = (req: Request, _res: Response, next: NextFunction) => {
-  const { projectId } = req.params;
-  if (!isValidObjectId(projectId)) {
-    next(new HttpError(400, `${projectId} is not valid id`));
+  const { taskId } = req.params;
+  if (!isValidObjectId(taskId)) {
+    next(new HttpError(400, `"${taskId}" is not valid id`));
   }
   next();
 };

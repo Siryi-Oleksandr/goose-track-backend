@@ -1,5 +1,5 @@
 import { Schema, Document, model } from "mongoose";
-import { handleMongooseError } from "../helpers/";
+import { handleMongooseError } from "../helpers";
 
 interface ITask extends Document {
   title: string;

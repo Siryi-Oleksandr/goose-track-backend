@@ -3,8 +3,8 @@ import logger from "morgan";
 import cors from "cors";
 import dotenv from "dotenv";
 dotenv.config();
-import projectsRouter from "./routes/api/projectsRouter";
-import usersRouter from "./routes/api/usersRouter";
+import tasksRouter from "./routes/tasksRouter";
+import usersRouter from "./routes/usersRouter";
 
 const app = express();
 
@@ -16,8 +16,8 @@ app.use(cors());
 app.use(express.json());
 
 // *** main routers:
-app.use("/api/users", usersRouter);
-app.use("/api/projects", projectsRouter);
+app.use("/users", usersRouter);
+app.use("/tasks", tasksRouter);
 
 // *** error handlers:
 app.use((_req: any, res: Response) => {
