@@ -21,17 +21,8 @@ const getTasks = controllerWrapper(async (req: Request, res: Response) => {
 
 //* POST /tasks
 const addTask = controllerWrapper(async (req: Request, res: Response) => {
-  //   const { _id: owner } = req.user;
-  //   const { path: tempUpload } = req.file;
-
-  //   const fileData = await cloudinaryAPI.upload(tempUpload);
-  //   await fs.unlink(tempUpload);
-
   const task = await TaskModel.create({
     ...req.body,
-    // owner,
-    // posterURL: fileData.url,
-    // posterID: fileData.public_id,
   });
 
   res.status(201).json(task);
