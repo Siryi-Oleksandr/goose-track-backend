@@ -8,7 +8,7 @@ import TaskModel from "../models/task";
 const getTasks = controllerWrapper(async (req: Request, res: Response) => {
   const { page = 1, limit = 10 } = req.query as {
     page?: number;
-    limit?: number;
+    limit?: number; // TODO create get tasks for month
     // favorite?: boolean;
   };
   const skip = (page - 1) * limit;
@@ -38,6 +38,21 @@ const getTaskById = controllerWrapper(async (req: Request, res: Response) => {
   res.json(task);
 });
 
+//* PATCH /tasks/:taskId
+const updateTask = controllerWrapper(async (req: Request, res: Response) => {
+  const { taskId } = req.params;
+
+  const task = await TaskModel.findByIdAndUpdate(taskId, req.body, {
+    new: true,
+  });
+
+  if (!task) {
+    throw new HttpError(404, `Contact with ${taskId} not found`);
+  }
+
+  res.json(task);
+});
+
 //* DELETE /tasks/:taskId
 const removeTask = controllerWrapper(async (req: Request, res: Response) => {
   const { taskId } = req.params;
@@ -48,4 +63,4 @@ const removeTask = controllerWrapper(async (req: Request, res: Response) => {
   res.json({ message: "Task deleted" });
 });
 
-export { getTasks, addTask, getTaskById, removeTask };
+export { getTasks, addTask, getTaskById, updateTask, removeTask };
