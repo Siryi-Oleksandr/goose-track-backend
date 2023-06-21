@@ -21,11 +21,8 @@ const getTasks = controllerWrapper(async (req: Request, res: Response) => {
 
 //* POST /tasks
 const addTask = controllerWrapper(async (req: Request, res: Response) => {
-  //   const { _id: owner } = req.user;
-
   const task = await TaskModel.create({
     ...req.body,
-    // owner,
   });
 
   res.status(201).json(task);
