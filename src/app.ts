@@ -1,4 +1,4 @@
-import express, { Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import logger from "morgan";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 // *** main routers:
-app.use("/users", usersRouter);
+app.use("/", usersRouter);
 app.use("/tasks", tasksRouter);
 
 // *** error handlers:
@@ -29,7 +29,7 @@ app.use((_req: any, res: Response) => {
   });
 });
 
-app.use((err: any, _req: any, res: Response, _next: any) => {
+app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
   const { status = 500, message = "Server error" } = err;
   res.status(status).json({
     message,

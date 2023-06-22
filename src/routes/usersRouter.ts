@@ -1,8 +1,10 @@
 import express from "express";
-import { signup } from "../controllers/userControllers";
+import { register } from "../controllers/userControllers";
+import { joiRegisterSchema } from "../helpers";
+import { isValidBody } from "../middlewares";
 
 const router = express.Router();
 
-router.post("/signup", signup);
+router.post("/register", isValidBody(joiRegisterSchema), register);
 
 export default router;
