@@ -63,4 +63,16 @@ const joiRegisterSchema = Joi.object({
   }),
 });
 
-export { joiTasksSchema, joiRegisterSchema };
+const joiLoginSchema = Joi.object({
+  email: Joi.string()
+    .pattern(new RegExp(emailRegex))
+    .required()
+    .messages({ "any.required": "Email is required" }),
+
+  password: Joi.string().min(6).required().messages({
+    "any.required": "Password is required",
+    "string.min": "The length of 'password' must be min 6 characters",
+  }),
+});
+
+export { joiTasksSchema, joiRegisterSchema, joiLoginSchema };

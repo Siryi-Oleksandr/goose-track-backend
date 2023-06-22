@@ -1,7 +1,11 @@
 import controllerWrapper from "./controllerWrapper";
 import HttpError from "./HttpError";
 import handleMongooseError from "./handleMongooseError";
-import { joiTasksSchema, joiRegisterSchema } from "./joiShemaValidation";
+import {
+  joiTasksSchema,
+  joiRegisterSchema,
+  joiLoginSchema,
+} from "./joiShemaValidation";
 import { assignTokens } from "./assignTokens";
 
 export {
@@ -10,5 +14,6 @@ export {
   handleMongooseError,
   joiTasksSchema,
   joiRegisterSchema,
+  joiLoginSchema,
   assignTokens,
 };
