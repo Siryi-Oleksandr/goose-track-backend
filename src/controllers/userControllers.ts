@@ -69,5 +69,13 @@ const login = controllerWrapper(async (req: Request, res: Response) => {
   });
 });
 
+//* POST /logout
+const logout = controllerWrapper(async (req: any, res: Response) => {
+  const { _id } = req.user;
+  await UserModel.findByIdAndUpdate(_id, { refreshToken: null });
+
+  res.status(200).json({ message: "logout successfull" });
+});
+
 // * exports
-export { register, login };
+export { register, login, logout };
