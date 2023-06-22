@@ -1,19 +1,13 @@
 import Joi from "joi";
 
-// enum priorityList {
-//   "low",
-//   "medium",
-//   "high",
-// }
+const categoryType = ["to-do", "in-progress", "done"];
+const priorityType = ["low", "medium", "high"];
 
-// enum categoryList {
-//   "to-do",
-//   "in-progress",
-//   "done",
-// }
-
-const emailRegex: RegExp =
+const emailRegexp: RegExp =
   /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
+const dateRegexp: RegExp =
+  /[1-9][0-9][0-9]{2}-([0][1-9]|[1][0-2])-([1-2][0-9]|[0][1-9]|[3][0-1])/;
+const timeRegexp: RegExp = /^([01]\d|2[0-3]):[0-5]\d$/;
 
 const joiTasksSchema = Joi.object({
   title: Joi.string().min(3).max(250).required().messages({
@@ -23,24 +17,27 @@ const joiTasksSchema = Joi.object({
   }),
 
   start: Joi.string()
+    .pattern(new RegExp(timeRegexp))
     .required()
     .messages({ "any.required": "Missing required 'start time' field" }),
 
   end: Joi.string()
+    .pattern(new RegExp(timeRegexp))
     .required()
     .messages({ "any.required": "Missing required 'end time' field" }),
 
   priority: Joi.string()
-    // .valid(priorityList)
+    .valid(...priorityType)
     .required()
     .messages({ "any.required": "Missing required 'priority' field" }),
 
   date: Joi.string()
+    .pattern(new RegExp(dateRegexp))
     .required()
     .messages({ "any.required": "Missing required 'end time' field" }),
 
   category: Joi.string()
-    // .valid(categoryList)
+    .valid(...categoryType)
     .required()
     .messages({ "any.required": "Missing required 'category' field" }),
 });
@@ -53,7 +50,7 @@ const joiRegisterSchema = Joi.object({
   }),
 
   email: Joi.string()
-    .pattern(new RegExp(emailRegex))
+    .pattern(new RegExp(emailRegexp))
     .required()
     .messages({ "any.required": "Email is required" }),
 
@@ -65,7 +62,7 @@ const joiRegisterSchema = Joi.object({
 
 const joiLoginSchema = Joi.object({
   email: Joi.string()
-    .pattern(new RegExp(emailRegex))
+    .pattern(new RegExp(emailRegexp))
     .required()
     .messages({ "any.required": "Email is required" }),
 

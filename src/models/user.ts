@@ -1,7 +1,7 @@
 import { Schema, Document, model } from "mongoose";
 import { handleMongooseError } from "../helpers";
 
-const emailRegex: RegExp =
+const emailRegexp: RegExp =
   /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
 
 interface IUser extends Document {
@@ -23,7 +23,7 @@ const userSchema = new Schema<IUser>(
     },
     email: {
       type: String,
-      match: emailRegex,
+      match: emailRegexp,
       unique: true,
       required: [true, "Email is required"],
     },

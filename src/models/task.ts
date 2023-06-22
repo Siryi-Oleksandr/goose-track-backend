@@ -1,6 +1,12 @@
 import { Schema, Document, model } from "mongoose";
 import { handleMongooseError } from "../helpers";
 
+const dateRegexp: RegExp =
+  /[1-9][0-9][0-9]{2}-([0][1-9]|[1][0-2])-([1-2][0-9]|[0][1-9]|[3][0-1])/;
+const timeRegexp: RegExp = /^([01]\d|2[0-3]):[0-5]\d$/;
+const categoryType = ["to-do", "in-progress", "done"];
+const priorityType = ["low", "medium", "high"];
+
 interface ITask extends Document {
   title: string;
   start: string;
@@ -10,14 +16,6 @@ interface ITask extends Document {
   category: "to-do" | "in-progress" | "done";
   owner: Schema.Types.ObjectId;
 }
-
-// "валідація форми:
-// title: макс 250 сиволів | обов'язково
-// start: формат 09:00 | обов'язково
-// end: формат 09:30 | end > start | обов'язково
-// priority: [low | medium | high] | обов'язково
-// date: формат YYYY-MM-DD | обов'язково
-// category: [to-do | in-progress | done] | обов'язково"
 
 const taskSchema = new Schema<ITask>(
   {
@@ -29,24 +27,27 @@ const taskSchema = new Schema<ITask>(
     },
     start: {
       type: String,
+      match: timeRegexp,
       default: "09-00",
     },
     end: {
       type: String,
+      match: timeRegexp,
       default: "09-30",
     },
     priority: {
       type: String,
-      enum: ["low", "medium", "high"],
+      enum: priorityType,
       required: [true, "Set priority for your task"],
     },
     date: {
       type: String,
+      match: dateRegexp,
       required: [true, "Set date for your task"],
     },
     category: {
       type: String,
-      enum: ["to-do", "in-progress", "done"],
+      enum: categoryType,
       required: [true, "Set category for your task"],
     },
     owner: {

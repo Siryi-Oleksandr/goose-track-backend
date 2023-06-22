@@ -6,7 +6,7 @@ import { Response, NextFunction } from "express";
 const { ACCESS_TOKEN_SECRET_KEY = "", REFRESH_TOKEN_SECRET_KEY = "" } =
   process.env;
 
-const authenticate = async (req: any, res: Response, next: NextFunction) => {
+const authenticate = async (req: any, _res: Response, next: NextFunction) => {
   const { authorization = "" } = req.headers;
   const [bearer, token] = authorization.split(" ");
   if (bearer !== "Bearer" || !token) {
@@ -37,10 +37,10 @@ const authenticate = async (req: any, res: Response, next: NextFunction) => {
 
     try {
       jwt.verify(user.refreshToken, REFRESH_TOKEN_SECRET_KEY);
-      const { accessToken, refreshToken } = assignTokens(user);
+      const { refreshToken } = assignTokens(user);
       await UserModel.findByIdAndUpdate(user.userId, { refreshToken });
-      res.json({ accessToken });
-      // next();
+      // res.json({ accessToken }); // ? this moment needs to be thinked
+      next();
     } catch (err) {
       next(new HttpError(401, "Refresh token is expired"));
     }
