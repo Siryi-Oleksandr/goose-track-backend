@@ -1,35 +1,39 @@
-import { Response, Request } from "express";
+import { Response } from "express";
 import { controllerWrapper, HttpError } from "../helpers";
 import TaskModel from "../models/task";
 
 // ******************* API:  /tasks  ******************
 
 //* GET /tasks
-const getTasks = controllerWrapper(async (req: Request, res: Response) => {
+const getTasks = controllerWrapper(async (req: any, res: Response) => {
+  const { _id: owner } = req.user;
   const { page = 1, limit = 10 } = req.query as {
     page?: number;
     limit?: number; // TODO create get tasks for month
     // favorite?: boolean;
   };
   const skip = (page - 1) * limit;
-  const tasks = await TaskModel.find({}, "-createdAt -updatedAt", {
+  const tasks = await TaskModel.find({ owner }, "-createdAt -updatedAt", {
     skip,
     limit,
-  });
+  }).populate("owner", "name email avatarURL");
   res.json(tasks);
 });
 
 //* POST /tasks
-const addTask = controllerWrapper(async (req: Request, res: Response) => {
+const addTask = controllerWrapper(async (req: any, res: Response) => {
+  const { _id: owner } = req.user;
+  console.log(">>>", owner);
   const task = await TaskModel.create({
     ...req.body,
+    owner,
   });
 
   res.status(201).json(task);
 });
 
 //* GET /tasks/:taskId
-const getTaskById = controllerWrapper(async (req: Request, res: Response) => {
+const getTaskById = controllerWrapper(async (req: any, res: Response) => {
   const { taskId } = req.params;
   const task = await TaskModel.findById(taskId);
   if (!task) {
@@ -39,7 +43,7 @@ const getTaskById = controllerWrapper(async (req: Request, res: Response) => {
 });
 
 //* PATCH /tasks/:taskId
-const updateTask = controllerWrapper(async (req: Request, res: Response) => {
+const updateTask = controllerWrapper(async (req: any, res: Response) => {
   const { taskId } = req.params;
 
   const task = await TaskModel.findByIdAndUpdate(taskId, req.body, {
@@ -54,7 +58,7 @@ const updateTask = controllerWrapper(async (req: Request, res: Response) => {
 });
 
 //* DELETE /tasks/:taskId
-const removeTask = controllerWrapper(async (req: Request, res: Response) => {
+const removeTask = controllerWrapper(async (req: any, res: Response) => {
   const { taskId } = req.params;
   const removedTask = await TaskModel.findByIdAndRemove(taskId);
   if (!removedTask) {

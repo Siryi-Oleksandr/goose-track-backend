@@ -6,10 +6,12 @@ import {
   removeTask,
   updateTask,
 } from "../controllers/taskControllers";
-import { isValidId, isValidBody } from "../middlewares";
+import { isValidId, isValidBody, authenticate } from "../middlewares";
 import { joiTasksSchema } from "../helpers";
 
 const router = express.Router();
+
+router.use(authenticate); // checks user before all routes and actions
 
 router.get("/", getTasks);
 router.get("/:taskId", isValidId, getTaskById);
