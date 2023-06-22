@@ -8,7 +8,7 @@ interface ITask extends Document {
   priority: "low" | "medium" | "high";
   date: string;
   category: "to-do" | "in-progress" | "done";
-  // owner: Schema.Types.ObjectId;
+  owner: Schema.Types.ObjectId;
 }
 
 // "валідація форми:
@@ -49,11 +49,11 @@ const taskSchema = new Schema<ITask>(
       enum: ["to-do", "in-progress", "done"],
       required: [true, "Set category for your task"],
     },
-    // owner: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "user",
-    //   required: true,
-    // },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
