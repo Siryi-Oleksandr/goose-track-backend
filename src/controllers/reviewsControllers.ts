@@ -34,7 +34,9 @@ const getOwnReview = controllerWrapper(async (req: Request, res: Response) => {
 //* POST /reviews/own
 
 const addReview = controllerWrapper(async (req: any, res: Response) => {
-  const { _id: owner, avatar, name, refreshToken } = req.user;
+  const { _id: owner } = req.user;
+
+  console.log(owner);
 
   if (!owner) {
     throw new HttpError(404, "Review not found");
@@ -44,9 +46,6 @@ const addReview = controllerWrapper(async (req: any, res: Response) => {
     ...req.body,
     date: new Date(),
     owner,
-    avatar,
-    name,
-    refreshToken,
   });
 
   res.status(201).json(review);
@@ -69,10 +68,10 @@ const updateReview = controllerWrapper(async (req: Request, res: Response) => {
 
 //* DELETE /reviews/own
 const removeReview = controllerWrapper(async (req: Request, res: Response) => {
-  const { ReviewId } = req.params;
-  const removedReview = await ReviewModel.findByIdAndRemove(ReviewId);
+  const { own } = req.params;
+  const removedReview = await ReviewModel.findByIdAndRemove(own);
   if (!removedReview) {
-    throw new HttpError(404, `Review with "${ReviewId}" not found`);
+    throw new HttpError(404, `Review with "${own}" not found`);
   }
   res.json({ message: "Review deleted" });
 });

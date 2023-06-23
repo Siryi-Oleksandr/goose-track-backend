@@ -32,18 +32,6 @@ const reviewsSchema = new Schema<IReview>(
       ref: "user",
       required: true,
     },
-    name: {
-      type: String,
-      required: true,
-    },
-    avatar: {
-      type: String,
-      default: "09-00",
-    },
-    refreshToken: {
-      type: String,
-      required: true,
-    },
   },
   { versionKey: false, timestamps: true }
 );
