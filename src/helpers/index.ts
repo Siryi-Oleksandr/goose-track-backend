@@ -8,6 +8,7 @@ import {
   joiReviewsSchema,
 } from "./joiShemaValidation";
 import { assignTokens } from "./assignTokens";
+import { getFilterDate } from "./dateService";
 
 export {
   controllerWrapper,
@@ -18,4 +19,5 @@ export {
   joiLoginSchema,
   joiReviewsSchema,
   assignTokens,
+  getFilterDate,
 };
