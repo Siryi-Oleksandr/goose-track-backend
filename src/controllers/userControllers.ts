@@ -77,5 +77,11 @@ const logout = controllerWrapper(async (req: any, res: Response) => {
   res.status(200).json({ message: "logout successfull" });
 });
 
+//* GET /current
+const getCurrentUser = controllerWrapper(async (req: any, res: Response) => {
+  const { email, name, avatarURL } = req.user;
+  res.json({ name, email, avatarURL });
+});
+
 // * exports
-export { register, login, logout };
+export { register, login, logout, getCurrentUser };
