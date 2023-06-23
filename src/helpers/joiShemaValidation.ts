@@ -107,7 +107,6 @@ const joiUpdateUserSchema = Joi.object({
     .messages({ "any.required": "Email is required" }),
 
   phone: Joi.string().pattern(new RegExp(phoneRegexp)).messages({
-    "any.required": "Missing required 'phone' field",
     "string.pattern.base":
       "The phone number format is incorrect. Please enter in the format +XX-XXX-XXX-XX-XX",
   }),

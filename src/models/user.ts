@@ -16,9 +16,9 @@ interface IUser extends Document {
   phone?: string;
   skype?: string;
   birthday?: string;
-  refreshToken: string | null;
-  avatarURL: string | null;
-  avatarID: string | null;
+  refreshToken: string;
+  avatarURL: string;
+  avatarID: string;
 }
 
 const userSchema = new Schema<IUser>(

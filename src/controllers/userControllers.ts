@@ -10,7 +10,10 @@ interface RequestBody {
   email: string;
   password: string;
   name?: string;
-  // Other properties in the req.body if applicable
+  phone?: string;
+  skype?: string;
+  birthday?: string;
+  avatarURL: string;
 }
 
 //* POST /register
@@ -83,5 +86,33 @@ const getCurrentUser = controllerWrapper(async (req: any, res: Response) => {
   res.json({ name, email, avatarURL });
 });
 
+//* PATCH /update
+const update = controllerWrapper(async (req: any, res: Response) => {
+  const { _id } = req.user;
+  await UserModel.findByIdAndUpdate(_id, { ...req.body });
+  // const { path: tempUpload } = req.file;
+  console.log(req.file);
+
+  // const project = await Project.findById(projectId);
+  // if (!project) {
+  //   throw new HttpError(404, `Project with ${projectId} not found`);
+  // }
+
+  // const fileData = await cloudinaryAPI.upload(tempUpload);
+  // await fs.unlink(tempUpload);
+  // if (project.posterID) {
+  //   await cloudinaryAPI.delete(project.posterID);
+  // }
+
+  // await Project.findByIdAndUpdate(projectId, {
+  //   posterURL: fileData.url,
+  //   posterID: fileData.public_id,
+  // });
+  res.json({
+    // posterURL: fileData.url,
+    text: "Poster",
+  });
+});
+
 // * exports
-export { register, login, logout, getCurrentUser };
+export { register, login, logout, getCurrentUser, update };
