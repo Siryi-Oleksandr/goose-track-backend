@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { controllerWrapper, HttpError, getFilterDate } from "../helpers";
+import { controllerWrapper, HttpError, dateServise } from "../helpers";
 import TaskModel from "../models/task";
 
 // ******************* API:  /tasks  ******************
@@ -7,7 +7,7 @@ import TaskModel from "../models/task";
 //* GET /tasks
 const getTasks = controllerWrapper(async (req: any, res: Response) => {
   const { _id: owner } = req.user;
-  const filterDate = getFilterDate({ ...req.query });
+  const filterDate = dateServise.getFilterDate({ ...req.query });
   const regexDatePattern = new RegExp(`^${filterDate}`);
   const tasks = await TaskModel.find(
     { owner, date: { $regex: regexDatePattern } },
