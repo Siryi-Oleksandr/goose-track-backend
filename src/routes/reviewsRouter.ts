@@ -6,14 +6,20 @@ import {
   updateReview,
   removeReview,
 } from "../controllers/reviewsControllers";
-import { isValidId, isValidBody } from "../middlewares";
-import { joiReviewsSchema } from "helpers";
+import { isValidId, isValidBody, authenticate } from "../middlewares";
+import { joiReviewsSchema } from "../helpers";
 
 const router = express.Router();
 router.get("/", getReviews);
-router.get("/own", isValidId, getOwnReview);
-router.post("/own", isValidBody(joiReviewsSchema), addReview);
-router.patch("/own", isValidId, isValidBody(joiReviewsSchema), updateReview);
-router.delete("/own", isValidId, removeReview);
+router.get("/own", authenticate, isValidId, getOwnReview);
+router.post("/own", authenticate, isValidBody(joiReviewsSchema), addReview);
+router.patch(
+  "/own",
+  authenticate,
+  isValidId,
+  isValidBody(joiReviewsSchema),
+  updateReview
+);
+router.delete("/own", authenticate, isValidId, removeReview);
 
 export default router;

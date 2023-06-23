@@ -1,17 +1,17 @@
 import { Schema, Document, model } from "mongoose";
 import { handleMongooseError } from "../helpers";
 
-interface IReviews extends Document {
+interface IReview extends Document {
   name: string;
   avatar: string;
   text: string;
   rating: 1 | 2 | 3 | 4 | 5;
-  verificationToken: string;
+  refreshToken: string;
   date: string;
   owner: Schema.Types.ObjectId;
 }
 
-const reviewsSchema = new Schema<IReviews>(
+const reviewsSchema = new Schema<IReview>(
   {
     rating: {
       type: Number,
@@ -40,7 +40,7 @@ const reviewsSchema = new Schema<IReviews>(
       type: String,
       default: "09-00",
     },
-    verificationToken: {
+    refreshToken: {
       type: String,
       required: true,
     },
@@ -48,8 +48,8 @@ const reviewsSchema = new Schema<IReviews>(
   { versionKey: false, timestamps: true }
 );
 
-reviewsSchema.post<IReviews>("save", handleMongooseError);
+reviewsSchema.post<IReview>("save", handleMongooseError);
 
-const ReviewsModel = model<IReviews>("reviews", reviewsSchema);
+const ReviewsModel = model<IReview>("review", reviewsSchema);
 
 export default ReviewsModel;

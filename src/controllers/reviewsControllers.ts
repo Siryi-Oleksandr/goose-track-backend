@@ -14,7 +14,7 @@ const getReviews = controllerWrapper(async (req: Request, res: Response) => {
   const reviews = await ReviewModel.find({}, "-createdAt -updatedAt", {
     skip,
     limit,
-  });
+  }).populate("owner", "name avatarURL");
   res.json(reviews);
 });
 
@@ -32,12 +32,10 @@ const getOwnReview = controllerWrapper(async (req: Request, res: Response) => {
 });
 
 //* POST /reviews/own
-const addReview = controllerWrapper(async (req: any, res: Response) => {
-  const { _id: owner, avatar, name, verificationToken } = req.user;
 
-  if (!verificationToken) {
-    throw new HttpError(401, "Unathorized");
-  }
+const addReview = controllerWrapper(async (req: any, res: Response) => {
+  const { _id: owner, avatar, name, refreshToken } = req.user;
+
   if (!owner) {
     throw new HttpError(404, "Review not found");
   }
@@ -48,7 +46,7 @@ const addReview = controllerWrapper(async (req: any, res: Response) => {
     owner,
     avatar,
     name,
-    verificationToken,
+    refreshToken,
   });
 
   res.status(201).json(review);
