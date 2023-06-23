@@ -72,4 +72,21 @@ const joiLoginSchema = Joi.object({
   }),
 });
 
-export { joiTasksSchema, joiRegisterSchema, joiLoginSchema };
+const joiReviewsSchema = Joi.object({
+  text: Joi.string().min(2).max(3500).required().messages({
+    "any.required": "Missing required 'text' field",
+    "string.min": "The length of 'text' must be between 2 and 3500 characters",
+    "string.max": "The length of 'text' must be between 2 and 3500 characters",
+  }),
+
+  rating: Joi.number().min(1).max(5).messages({
+    "number.min": "Number of 'rating' must be between 1 and 5",
+    "number.max": "Number of 'rating' must be between 1 and 5",
+  }),
+
+  // date: Joi.string()
+  //   .required()
+  //   .messages({ "any.required": "Missing required 'end time' field" }),
+});
+
+export { joiTasksSchema, joiRegisterSchema, joiLoginSchema, joiReviewsSchema };

@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import tasksRouter from "./routes/tasksRouter";
 import usersRouter from "./routes/usersRouter";
+import reviewsRouter from "./routes/reviewsRouter";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 // *** main routers:
 app.use("/", usersRouter);
 app.use("/tasks", tasksRouter);
+app.use("/reviews", reviewsRouter);
 
 // *** error handlers:
 app.use((_req: any, res: Response) => {

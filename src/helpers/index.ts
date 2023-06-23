@@ -5,6 +5,7 @@ import {
   joiTasksSchema,
   joiRegisterSchema,
   joiLoginSchema,
+  joiReviewsSchema,
 } from "./joiShemaValidation";
 import { assignTokens } from "./assignTokens";
 
@@ -15,5 +16,6 @@ export {
   joiTasksSchema,
   joiRegisterSchema,
   joiLoginSchema,
+  joiReviewsSchema,
   assignTokens,
 };
