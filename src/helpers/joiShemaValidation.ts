@@ -8,6 +8,11 @@ const emailRegexp: RegExp =
 const dateRegexp: RegExp =
   /[1-9][0-9][0-9]{2}-([0][1-9]|[1][0-2])-([1-2][0-9]|[0][1-9]|[3][0-1])/;
 const timeRegexp: RegExp = /^([01]\d|2[0-3]):[0-5]\d$/;
+const phoneRegexp: RegExp =
+  /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,3}[-\s.]?[0-9]{1,4}[-\s.]?[0-9]{1,4}$/;
+const skypeNumberRegexp: RegExp = /^\+[1-9]\d{0,2}[.-]?\d{1,14}$/;
+const birthdayRegexp: RegExp =
+  /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
 
 const joiTasksSchema = Joi.object({
   title: Joi.string().min(3).max(250).required().messages({
@@ -89,4 +94,39 @@ const joiReviewsSchema = Joi.object({
   //   .messages({ "any.required": "Missing required 'end time' field" }),
 });
 
-export { joiTasksSchema, joiRegisterSchema, joiLoginSchema, joiReviewsSchema };
+const joiUpdateUserSchema = Joi.object({
+  name: Joi.string().min(2).max(35).required().messages({
+    "any.required": "Missing required 'name' field",
+    "string.min": "The length of 'name' must be between 2 and 35 characters",
+    "string.max": "The length of 'name' must be between 2 and 35 characters",
+  }),
+
+  email: Joi.string()
+    .pattern(new RegExp(emailRegexp))
+    .required()
+    .messages({ "any.required": "Email is required" }),
+
+  phone: Joi.string().pattern(new RegExp(phoneRegexp)).messages({
+    "any.required": "Missing required 'phone' field",
+    "string.pattern.base":
+      "The phone number format is incorrect. Please enter in the format +XX-XXX-XXX-XX-XX",
+  }),
+
+  skype: Joi.string().pattern(new RegExp(skypeNumberRegexp)).messages({
+    "string.pattern.base":
+      "The skype number format is incorrect. Please enter in the format +XX-XXX-XXX-XX-XX",
+  }),
+
+  birthday: Joi.string().pattern(new RegExp(birthdayRegexp)).messages({
+    "string.pattern.base":
+      "The birthday format is incorrect. Please enter in the format 25/08/2002",
+  }),
+});
+
+export {
+  joiTasksSchema,
+  joiRegisterSchema,
+  joiLoginSchema,
+  joiReviewsSchema,
+  joiUpdateUserSchema,
+};
