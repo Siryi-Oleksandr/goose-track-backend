@@ -5,11 +5,8 @@ import mongoose from "mongoose";
 // import swaggerUi from "swagger-ui-express";
 
 const { DB_HOST = "", PORT = 3001 } = process.env;
-console.log(`DB_host --> ${DB_HOST}`);
 mongoose
-  .connect(
-    "mongodb+srv://goose-track:3JSULWxGkPXU6SvO@goosetrack.2srmvxg.mongodb.net/db-tasks?retryWrites=true&w=majority"
-  )
+  .connect(DB_HOST)
   .then((): void => {
     console.log("Database connection successful");
     app.listen(PORT, (): void => {
