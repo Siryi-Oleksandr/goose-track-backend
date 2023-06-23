@@ -24,8 +24,8 @@ app.use((_req: any, res: Response) => {
   res.status(404).json({
     status: "error",
     code: 404,
-    message: "Use api on routes: /api",
-    data: "Not found",
+    message: "Use api on routes: /",
+    data: "Not found such route",
   });
 });
 

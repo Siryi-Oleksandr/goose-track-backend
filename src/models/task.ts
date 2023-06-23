@@ -2,8 +2,8 @@ import { Schema, Document, model } from "mongoose";
 import { handleMongooseError } from "../helpers";
 
 const dateRegexp: RegExp =
-  /[1-9][0-9][0-9]{2}-([0][1-9]|[1][0-2])-([1-2][0-9]|[0][1-9]|[3][0-1])/;
-const timeRegexp: RegExp = /^([01]\d|2[0-3]):[0-5]\d$/;
+  /[1-9][0-9][0-9]{2}-([0][1-9]|[1][0-2])-([1-2][0-9]|[0][1-9]|[3][0-1])/; // YYYY-MM-DD
+const timeRegexp: RegExp = /^([01]\d|2[0-3]):[0-5]\d$/; // 09:00
 const categoryType = ["to-do", "in-progress", "done"];
 const priorityType = ["low", "medium", "high"];
 
