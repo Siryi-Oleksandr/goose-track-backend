@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { controllerWrapper, HttpError } from "../helpers";
+import { controllerWrapper, HttpError, getFilterDate } from "../helpers";
 import TaskModel from "../models/task";
 
 // ******************* API:  /tasks  ******************
@@ -7,23 +7,18 @@ import TaskModel from "../models/task";
 //* GET /tasks
 const getTasks = controllerWrapper(async (req: any, res: Response) => {
   const { _id: owner } = req.user;
-  const { page = 1, limit = 10 } = req.query as {
-    page?: number;
-    limit?: number; // TODO create get tasks for month
-    // favorite?: boolean;
-  };
-  const skip = (page - 1) * limit;
-  const tasks = await TaskModel.find({ owner }, "-createdAt -updatedAt", {
-    skip,
-    limit,
-  }).populate("owner", "name email avatarURL");
+  const filterDate = getFilterDate({ ...req.query });
+  const regexDatePattern = new RegExp(`^${filterDate}`);
+  const tasks = await TaskModel.find(
+    { owner, date: { $regex: regexDatePattern } },
+    "-createdAt -updatedAt"
+  ).populate("owner", "name email avatarURL");
   res.json(tasks);
 });
 
 //* POST /tasks
 const addTask = controllerWrapper(async (req: any, res: Response) => {
   const { _id: owner } = req.user;
-  console.log(">>>", owner);
   const task = await TaskModel.create({
     ...req.body,
     owner,

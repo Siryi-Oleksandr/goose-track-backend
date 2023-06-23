@@ -1,12 +1,5 @@
 import jwt from "jsonwebtoken";
 
-// interface EnvironmentVariables {
-//   ACCESS_TOKEN_SECRET_KEY: string;
-//   REFRESH_TOKEN_SECRET_KEY: string;
-//   ACCESS_TOKEN_EXPIRES_IN: string;
-//   REFRESH_TOKEN_EXPIRES_IN: string;
-// }
-
 const {
   ACCESS_TOKEN_SECRET_KEY = "",
   REFRESH_TOKEN_SECRET_KEY = "",
@@ -30,7 +23,6 @@ export const assignTokens = (user: {
     userName: user.name,
     userEmail: user.email,
   };
-  console.log("User =>>", user);
 
   const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET_KEY, {
     expiresIn: ACCESS_TOKEN_EXPIRES_IN,
