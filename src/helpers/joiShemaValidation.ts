@@ -8,11 +8,9 @@ const emailRegexp: RegExp =
 const dateRegexp: RegExp =
   /[1-9][0-9][0-9]{2}-([0][1-9]|[1][0-2])-([1-2][0-9]|[0][1-9]|[3][0-1])/;
 const timeRegexp: RegExp = /^([01]\d|2[0-3]):[0-5]\d$/;
-const phoneRegexp: RegExp =
-  /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,3}[-\s.]?[0-9]{1,4}[-\s.]?[0-9]{1,4}$/;
+const phoneRegexp: RegExp = /^(\d{2})\s\((\d{3})\)\s(\d{3})\s(\d{2})\s(\d{2})$/;
 const skypeNumberRegexp: RegExp = /^\+[1-9]\d{0,2}[.-]?\d{1,14}$/;
-const birthdayRegexp: RegExp =
-  /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+const birthdayRegexp: RegExp = /^\d{2}\/\d{2}\/\d{4}$/;
 
 const joiTasksSchema = Joi.object({
   title: Joi.string().min(3).max(250).required().messages({

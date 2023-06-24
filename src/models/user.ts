@@ -3,11 +3,9 @@ import { handleMongooseError } from "../helpers";
 
 const emailRegexp: RegExp =
   /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
-const phoneRegexp: RegExp =
-  /^[+]?[(]?[0-9]{1,4}[)]?[-\s.]?[0-9]{1,3}[-\s.]?[0-9]{1,4}[-\s.]?[0-9]{1,4}$/;
+const phoneRegexp: RegExp = /^(\d{2})\s\((\d{3})\)\s(\d{3})\s(\d{2})\s(\d{2})$/;
 const skypeNumberRegexp: RegExp = /^\+[1-9]\d{0,2}[.-]?\d{1,14}$/;
-const birthdayRegexp: RegExp =
-  /^(0[1-9]|1\d|2\d|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+const birthdayRegexp: RegExp = /^\d{2}\/\d{2}\/\d{4}$/;
 
 interface IUser extends Document {
   name: string;
