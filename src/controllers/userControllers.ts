@@ -1,7 +1,13 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import gravatar from "gravatar";
-import { HttpError, assignTokens, controllerWrapper } from "../helpers";
+import fs from "fs/promises";
+import {
+  HttpError,
+  assignTokens,
+  controllerWrapper,
+  cloudinaryAPI,
+} from "../helpers";
 import UserModel from "../models/user";
 
 // ******************* API:  /auth  ******************
@@ -88,30 +94,42 @@ const getCurrentUser = controllerWrapper(async (req: any, res: Response) => {
 
 //* PATCH /update
 const update = controllerWrapper(async (req: any, res: Response) => {
-  const { _id } = req.user;
-  await UserModel.findByIdAndUpdate(_id, { ...req.body });
-  // const { path: tempUpload } = req.file;
-  console.log(req.file);
+  const { _id, avatarID, avatarURL } = req.user;
+  const { email } = req.body;
 
-  // const project = await Project.findById(projectId);
-  // if (!project) {
-  //   throw new HttpError(404, `Project with ${projectId} not found`);
-  // }
+  const existedUser = await UserModel.findOne({ email });
+  if (existedUser) {
+    throw new HttpError(409, `Email "${email}" already exists`);
+  }
+  let newAvatarURL = avatarURL;
+  let newAvatarID = avatarID;
 
-  // const fileData = await cloudinaryAPI.upload(tempUpload);
-  // await fs.unlink(tempUpload);
-  // if (project.posterID) {
-  //   await cloudinaryAPI.delete(project.posterID);
-  // }
+  if (req.file) {
+    const { path: tempUpload } = req.file;
+    const fileData = await cloudinaryAPI.upload(tempUpload);
+    newAvatarURL = fileData.url;
+    newAvatarID = fileData.public_id;
+    await fs.unlink(tempUpload);
 
-  // await Project.findByIdAndUpdate(projectId, {
-  //   posterURL: fileData.url,
-  //   posterID: fileData.public_id,
-  // });
-  res.json({
-    // posterURL: fileData.url,
-    text: "Poster",
-  });
+    if (avatarID) {
+      await cloudinaryAPI.delete(avatarID);
+    }
+  }
+
+  const updatedUser = await UserModel.findByIdAndUpdate(
+    _id,
+    {
+      ...req.body,
+      avatarURL: newAvatarURL,
+      avatarID: newAvatarID,
+    },
+    {
+      new: true,
+      select: "-password -refreshToken -createdAt -updatedAt",
+    }
+  );
+
+  res.json(updatedUser);
 });
 
 // * exports

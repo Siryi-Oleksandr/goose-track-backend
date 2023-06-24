@@ -6,9 +6,11 @@ import {
   joiRegisterSchema,
   joiLoginSchema,
   joiReviewsSchema,
+  joiUpdateUserSchema,
 } from "./joiShemaValidation";
 import { assignTokens } from "./assignTokens";
 import { dateServise } from "./dateService";
+import { cloudinaryAPI } from "./CloudinaryAPI";
 
 export {
   controllerWrapper,
@@ -18,6 +20,8 @@ export {
   joiRegisterSchema,
   joiLoginSchema,
   joiReviewsSchema,
+  joiUpdateUserSchema,
   assignTokens,
   dateServise,
+  cloudinaryAPI,
 };

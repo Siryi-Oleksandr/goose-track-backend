@@ -1,9 +1,8 @@
 import multer, { FileFilterCallback } from "multer";
 import { Request } from "express";
 import path from "path";
-// import { HttpError } from "../helpers";
+import { HttpError } from "../helpers";
 
-// const tempDir = path.join(__dirname, "../", "temp");
 const tempDir = path.resolve("temp");
 
 const storage = multer.diskStorage({
@@ -31,11 +30,7 @@ const fileFilter = (
   if (acceptedMimeTypes.includes(file.mimetype)) {
     cb(null, true); // Accept the file
   } else {
-    cb(
-      null,
-      // new HttpError(400, "Only JPEG, PNG, and GIF images are allowed."),
-      false
-    ); // Reject the file
+    cb(new HttpError(400, "Unsupported file type") as any, false); // Reject the file
   }
 };
 
