@@ -30,16 +30,12 @@ const addTask = controllerWrapper(async (req: any, res: Response) => {
 //* GET /tasks/:taskId
 const getTaskById = controllerWrapper(async (req: any, res: Response) => {
   const { taskId } = req.params;
-  const { _id: owner } = req.user;
-  // const task = await TaskModel.findById(taskId).populate(
-  //   "owner",
-  //   "name email avatarURL"
-  // );
-  // possible get task by ID only logined user
-  const task = await TaskModel.find(
-    { owner, _id: taskId },
+
+  const task = await TaskModel.findById(
+    taskId,
     "-createdAt -updatedAt"
   ).populate("owner", "name email avatarURL");
+
   if (!task) {
     throw new HttpError(404, `Task with "${taskId}" not found`);
   }
