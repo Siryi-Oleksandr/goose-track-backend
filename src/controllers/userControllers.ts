@@ -1,7 +1,13 @@
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import gravatar from "gravatar";
-import { HttpError, assignTokens, controllerWrapper } from "../helpers";
+import fs from "fs/promises";
+import {
+  HttpError,
+  assignTokens,
+  controllerWrapper,
+  cloudinaryAPI,
+} from "../helpers";
 import UserModel from "../models/user";
 
 // ******************* API:  /auth  ******************
@@ -10,7 +16,10 @@ interface RequestBody {
   email: string;
   password: string;
   name?: string;
-  // Other properties in the req.body if applicable
+  phone?: string;
+  skype?: string;
+  birthday?: string;
+  avatarURL: string;
 }
 
 //* POST /register
@@ -29,6 +38,9 @@ const register = controllerWrapper(async (req: Request, res: Response) => {
     ...req.body,
     password: hashedPassword,
     avatarURL,
+    phone: "",
+    skype: "",
+    birthday: "",
   });
 
   const { accessToken, refreshToken } = assignTokens(newUser);
@@ -36,10 +48,13 @@ const register = controllerWrapper(async (req: Request, res: Response) => {
 
   res.status(201).json({
     accessToken,
-    refreshToken,
     user: {
       name: newUser.name,
       email: newUser.email,
+      phone: newUser.phone,
+      skype: newUser.skype,
+      birthday: newUser.birthday,
+      avatarURL: newUser.avatarURL,
     },
   });
 });
@@ -65,6 +80,10 @@ const login = controllerWrapper(async (req: Request, res: Response) => {
     user: {
       name: user.name,
       email: user.email,
+      phone: user.phone,
+      skype: user.skype,
+      birthday: user.birthday,
+      avatarURL: user.avatarURL,
     },
   });
 });
@@ -79,9 +98,49 @@ const logout = controllerWrapper(async (req: any, res: Response) => {
 
 //* GET /current
 const getCurrentUser = controllerWrapper(async (req: any, res: Response) => {
-  const { email, name, avatarURL } = req.user;
-  res.json({ name, email, avatarURL });
+  const { email, name, phone, skype, birthday, avatarURL } = req.user;
+  res.json({ email, name, phone, skype, birthday, avatarURL });
+});
+
+//* PATCH /update
+const update = controllerWrapper(async (req: any, res: Response) => {
+  const { _id, avatarID, avatarURL, email } = req.user;
+  const { email: newEmail } = req.body;
+
+  const existedUser = await UserModel.findOne({ newEmail });
+  if (existedUser && email !== newEmail) {
+    throw new HttpError(409, `Email "${newEmail}" already exists`);
+  }
+  let newAvatarURL = avatarURL;
+  let newAvatarID = avatarID;
+
+  if (req.file) {
+    const { path: tempUpload } = req.file;
+    const fileData = await cloudinaryAPI.upload(tempUpload);
+    newAvatarURL = fileData.url;
+    newAvatarID = fileData.public_id;
+    await fs.unlink(tempUpload);
+
+    if (avatarID) {
+      await cloudinaryAPI.delete(avatarID);
+    }
+  }
+
+  const updatedUser = await UserModel.findByIdAndUpdate(
+    _id,
+    {
+      ...req.body,
+      avatarURL: newAvatarURL,
+      avatarID: newAvatarID,
+    },
+    {
+      new: true,
+      select: "-password -refreshToken -createdAt -updatedAt -avatarID",
+    }
+  );
+
+  res.json(updatedUser);
 });
 
 // * exports
-export { register, login, logout, getCurrentUser };
+export { register, login, logout, getCurrentUser, update };
