@@ -9,7 +9,7 @@ import {
   joiUpdateUserSchema,
 } from "./joiShemaValidation";
 import { assignTokens } from "./assignTokens";
-import { dateServise } from "./DateService";
+import { dateServise } from "./DateAPI";
 import { cloudinaryAPI } from "./CloudinaryAPI";
 
 export {
