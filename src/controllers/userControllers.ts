@@ -7,6 +7,7 @@ import {
   assignTokens,
   controllerWrapper,
   cloudinaryAPI,
+  handleAvatar,
 } from "../helpers";
 import UserModel from "../models/user";
 
@@ -116,6 +117,9 @@ const update = controllerWrapper(async (req: any, res: Response) => {
 
   if (req.file) {
     const { path: tempUpload } = req.file;
+
+    await handleAvatar(tempUpload);
+
     const fileData = await cloudinaryAPI.upload(tempUpload);
     newAvatarURL = fileData.url;
     newAvatarID = fileData.public_id;
