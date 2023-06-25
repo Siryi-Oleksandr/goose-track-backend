@@ -1,5 +1,10 @@
 import { Response } from "express";
-import { controllerWrapper, HttpError, dateServise } from "../helpers";
+import {
+  controllerWrapper,
+  HttpError,
+  dateServise,
+  statisticsAPI,
+} from "../helpers";
 import TaskModel from "../models/task";
 
 // ******************* API:  /tasks  ******************
@@ -67,7 +72,7 @@ const removeTask = controllerWrapper(async (req: any, res: Response) => {
   res.json({ message: "Task deleted" });
 });
 
-//* PUT /tasks/:taskId
+//* PATCH /tasks/:taskId
 const updateTaskCategory = controllerWrapper(
   async (req: any, res: Response) => {
     const { taskId } = req.params;
@@ -81,6 +86,30 @@ const updateTaskCategory = controllerWrapper(
   }
 );
 
+//* GET /task/statistics
+const getStatistics = controllerWrapper(async (req: any, res: Response) => {
+  const { _id: owner } = req.user;
+  const { day } = req.query;
+  const month = dateServise.getChoosedMonth(day);
+  const regexDayPattern = new RegExp(`^${day}`);
+  const regexMonthPattern = new RegExp(`^${month}`);
+
+  const tasksByDay = await TaskModel.find({
+    owner,
+    date: { $regex: regexDayPattern },
+  });
+
+  const tasksByMonth = await TaskModel.find({
+    owner,
+    date: { $regex: regexMonthPattern },
+  });
+
+  const statisticsByDay = statisticsAPI.getStatisticByPeriod(tasksByDay);
+  const statisticsByMonth = statisticsAPI.getStatisticByPeriod(tasksByMonth);
+
+  res.json({ statisticsByDay, statisticsByMonth });
+});
+
 export {
   getTasks,
   addTask,
@@ -88,6 +117,7 @@ export {
   updateTask,
   removeTask,
   updateTaskCategory,
+  getStatistics,
 };
 
 // GET https://goose-track-verq.onrender.com/tasks/ - отримати таски

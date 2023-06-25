@@ -12,7 +12,7 @@ class DateServise {
     return `${currentYearh}-${this.formatNumber(currentMonth)}`;
   }
 
-  private getChoosedMonth(date: string): string {
+  public getChoosedMonth(date: string): string {
     // income YYYY-MM-DD
     return date.slice(0, 7); // YYYY-MM
   }
