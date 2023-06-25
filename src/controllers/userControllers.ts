@@ -146,7 +146,7 @@ const update = controllerWrapper(async (req: any, res: Response) => {
   res.json(updatedUser);
 });
 
-//* PUT /changePassword
+//* PATCH /changePassword
 const changePassword = controllerWrapper(async (req: any, res: Response) => {
   const { _id } = req.user;
   const { password, newPassword } = req.body;

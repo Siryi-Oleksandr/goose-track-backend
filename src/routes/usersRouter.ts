@@ -28,7 +28,7 @@ router.patch(
   isValidBody(joiUpdateUserSchema),
   update
 );
-router.put(
+router.patch(
   "/changePassword",
   authenticate,
   isValidBody(joiUserPasswordSchema),

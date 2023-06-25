@@ -14,6 +14,7 @@ import { assignTokens } from "./assignTokens";
 import { dateServise } from "./DateAPI";
 import { cloudinaryAPI } from "./CloudinaryAPI";
 import { handleAvatar } from "./handleAvatar";
+import { statisticsAPI } from "./StatisticsAPI";
 
 export {
   controllerWrapper,
@@ -30,4 +31,5 @@ export {
   dateServise,
   cloudinaryAPI,
   handleAvatar,
+  statisticsAPI,
 };
