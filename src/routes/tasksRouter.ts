@@ -22,7 +22,7 @@ router.post("/", isValidBody(joiTasksSchema), addTask);
 router.patch("/:taskId", isValidId, isValidBody(joiTasksSchema), updateTask);
 router.delete("/:taskId", isValidId, removeTask);
 router.patch(
-  "/:taskId",
+  "/category/:taskId",
   isValidId,
   isValidBody(joiTaskCategorySchema),
   updateTaskCategory
