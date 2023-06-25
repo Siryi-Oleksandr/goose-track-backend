@@ -146,5 +146,29 @@ const update = controllerWrapper(async (req: any, res: Response) => {
   res.json(updatedUser);
 });
 
+//* PUT /changePassword
+const changePassword = controllerWrapper(async (req: any, res: Response) => {
+  const { _id } = req.user;
+  const { password, newPassword } = req.body;
+
+  const user = await UserModel.findById(_id);
+  if (!user) {
+    throw new HttpError(401, `User not found`);
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    throw new HttpError(401, `Password invalid`);
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  await UserModel.findByIdAndUpdate(_id, {
+    password: hashedPassword,
+  });
+
+  res.json({ message: "password changed successfully" });
+});
+
 // * exports
-export { register, login, logout, getCurrentUser, update };
+export { register, login, logout, getCurrentUser, update, changePassword };
