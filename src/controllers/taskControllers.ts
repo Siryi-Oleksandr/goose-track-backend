@@ -67,6 +67,7 @@ const removeTask = controllerWrapper(async (req: any, res: Response) => {
   res.json({ message: "Task deleted" });
 });
 
+//* PUT /tasks/:taskId
 const updateTaskCategory = controllerWrapper(
   async (req: any, res: Response) => {
     const { taskId } = req.params;

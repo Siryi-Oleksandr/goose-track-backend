@@ -5,11 +5,13 @@ import {
   logout,
   getCurrentUser,
   update,
+  changePassword,
 } from "../controllers/userControllers";
 import {
   joiRegisterSchema,
   joiLoginSchema,
   joiUpdateUserSchema,
+  joiUserPasswordSchema,
 } from "../helpers";
 import { isValidBody, authenticate, upload } from "../middlewares";
 
@@ -25,6 +27,12 @@ router.patch(
   upload.single("avatar"),
   isValidBody(joiUpdateUserSchema),
   update
+);
+router.put(
+  "/changePassword",
+  authenticate,
+  isValidBody(joiUserPasswordSchema),
+  changePassword
 );
 
 export default router;

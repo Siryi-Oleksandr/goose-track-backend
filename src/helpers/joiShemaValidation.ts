@@ -37,7 +37,7 @@ const joiTasksSchema = Joi.object({
   date: Joi.string()
     .pattern(new RegExp(dateRegexp))
     .required()
-    .messages({ "any.required": "Missing required 'end time' field" }),
+    .messages({ "any.required": "Missing required 'date' field" }),
 
   category: Joi.string()
     .valid(...categoryType)
@@ -76,10 +76,10 @@ const joiLoginSchema = Joi.object({
 });
 
 const joiReviewsSchema = Joi.object({
-  text: Joi.string().min(2).max(3500).required().messages({
+  text: Joi.string().min(2).max(300).required().messages({
     "any.required": "Missing required 'text' field",
-    "string.min": "The length of 'text' must be between 2 and 3500 characters",
-    "string.max": "The length of 'text' must be between 2 and 3500 characters",
+    "string.min": "The length of 'text' must be between 2 and 300 characters",
+    "string.max": "The length of 'text' must be between 2 and 300 characters",
   }),
 
   rating: Joi.number().min(1).max(5).messages({
@@ -127,6 +127,18 @@ const joiTaskCategorySchema = Joi.object({
     .messages({ "any.required": "Missing required 'category' field" }),
 });
 
+const joiUserPasswordSchema = Joi.object({
+  password: Joi.string().min(6).required().messages({
+    "any.required": "Password is required",
+    "string.min": "The length of 'password' must be min 6 characters",
+  }),
+
+  newPassword: Joi.string().min(6).required().messages({
+    "any.required": "New password is required",
+    "string.min": "The length of 'new password' must be min 6 characters",
+  }),
+});
+
 export {
   joiTasksSchema,
   joiRegisterSchema,
@@ -134,4 +146,5 @@ export {
   joiReviewsSchema,
   joiUpdateUserSchema,
   joiTaskCategorySchema,
+  joiUserPasswordSchema,
 };

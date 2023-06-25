@@ -8,6 +8,7 @@ import {
   joiReviewsSchema,
   joiUpdateUserSchema,
   joiTaskCategorySchema,
+  joiUserPasswordSchema,
 } from "./joiShemaValidation";
 import { assignTokens } from "./assignTokens";
 import { dateServise } from "./DateAPI";
@@ -24,6 +25,7 @@ export {
   joiReviewsSchema,
   joiUpdateUserSchema,
   joiTaskCategorySchema,
+  joiUserPasswordSchema,
   assignTokens,
   dateServise,
   cloudinaryAPI,
