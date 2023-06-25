@@ -120,10 +120,18 @@ const joiUpdateUserSchema = Joi.object({
   }),
 });
 
+const joiTaskCategorySchema = Joi.object({
+  category: Joi.string()
+    .valid(...categoryType)
+    .required()
+    .messages({ "any.required": "Missing required 'category' field" }),
+});
+
 export {
   joiTasksSchema,
   joiRegisterSchema,
   joiLoginSchema,
   joiReviewsSchema,
   joiUpdateUserSchema,
+  joiTaskCategorySchema,
 };
