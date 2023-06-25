@@ -2,6 +2,7 @@ interface IStatistic {
   todo: number;
   inProgress: number;
   done: number;
+  allTasks: number;
 }
 
 interface ITask {
@@ -31,6 +32,7 @@ class StatisticsAPI {
       todo: Math.round((todo / allTasks) * 100),
       inProgress: Math.round((inProgress / allTasks) * 100),
       done: Math.round((done / allTasks) * 100),
+      allTasks,
     };
 
     return statistics;
