@@ -22,7 +22,7 @@ const getReviews = controllerWrapper(async (req: Request, res: Response) => {
 
 const getOwnReview = controllerWrapper(async (req: any, res: Response) => {
   const { _id: owner } = req.user;
-  const result = await ReviewModel.find(
+  const result = await ReviewModel.findOne(
     { owner },
     "-createdAt -updatedAt"
   ).populate("owner", "name avatarURL");
