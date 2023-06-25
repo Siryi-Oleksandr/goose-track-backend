@@ -40,6 +40,7 @@ const authenticate = async (req: any, res: Response, next: NextFunction) => {
       const { accessToken, refreshToken } = assignTokens(user);
       await UserModel.findByIdAndUpdate(user.userId, { refreshToken });
       res.json({ accessToken }); // ? this moment needs to be thinked
+      // req.user = user; // add user to request and  we will have this info in controller
       // next();
     } catch (err) {
       next(new HttpError(401, "Refresh token is expired"));

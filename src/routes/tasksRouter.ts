@@ -5,9 +5,10 @@ import {
   getTaskById,
   removeTask,
   updateTask,
+  updateTaskCategory,
 } from "../controllers/taskControllers";
 import { isValidId, isValidBody, authenticate } from "../middlewares";
-import { joiTasksSchema } from "../helpers";
+import { joiTasksSchema, joiTaskCategorySchema } from "../helpers";
 
 const router = express.Router();
 
@@ -18,5 +19,12 @@ router.get("/:taskId", isValidId, getTaskById);
 router.post("/", isValidBody(joiTasksSchema), addTask);
 router.patch("/:taskId", isValidId, isValidBody(joiTasksSchema), updateTask);
 router.delete("/:taskId", isValidId, removeTask);
+router.put(
+  "/:taskId",
+  authenticate,
+  isValidId,
+  isValidBody(joiTaskCategorySchema),
+  updateTaskCategory
+);
 
 export default router;

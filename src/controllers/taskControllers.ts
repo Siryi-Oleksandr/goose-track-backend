@@ -67,7 +67,27 @@ const removeTask = controllerWrapper(async (req: any, res: Response) => {
   res.json({ message: "Task deleted" });
 });
 
-export { getTasks, addTask, getTaskById, updateTask, removeTask };
+const updateTaskCategory = controllerWrapper(
+  async (req: any, res: Response) => {
+    const { taskId } = req.params;
+    const task = await TaskModel.findByIdAndUpdate(taskId, req.body, {
+      new: true,
+    });
+    if (!task) {
+      throw new HttpError(404, `Task with "${taskId}" not found`);
+    }
+    res.json(task);
+  }
+);
+
+export {
+  getTasks,
+  addTask,
+  getTaskById,
+  updateTask,
+  removeTask,
+  updateTaskCategory,
+};
 
 // GET https://goose-track-verq.onrender.com/tasks/ - отримати таски
 // GET https://goose-track-verq.onrender.com/tasks/?page=1&limit=10 - отримати таски з пагінацією
