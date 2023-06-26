@@ -2,6 +2,7 @@ import express from "express";
 import {
   register,
   login,
+  refresh,
   logout,
   getCurrentUser,
   update,
@@ -24,6 +25,7 @@ router.get(
 
 router.post("/register", isValidBody(joiAPI.registerSchema), register);
 router.post("/login", isValidBody(joiAPI.loginSchema), login);
+router.post("/refresh", isValidBody(joiAPI.refreshSchema), refresh);
 router.post("/logout", authenticate, logout);
 router.get("/current", authenticate, getCurrentUser);
 router.patch(
