@@ -3,6 +3,12 @@ import bcrypt from "bcrypt";
 import gravatar from "gravatar";
 import { HttpError, assignTokens, controllerWrapper } from "../helpers";
 import UserModel from "../models/user";
+import jwt from "jsonwebtoken";
+const {
+  ACCESS_TOKEN_SECRET_KEY = "",
+  REFRESH_TOKEN_SECRET_KEY = "",
+  FRONTEND_URL = "",
+} = process.env;
 
 // ******************* API:  /auth  ******************
 
@@ -77,5 +83,25 @@ const logout = controllerWrapper(async (req: any, res: Response) => {
   res.status(200).json({ message: "logout successfull" });
 });
 
+const googleAuth = async (req: any, res: Response) => {
+  const { _id: id } = req.user;
+
+  const payload: {
+    id: string;
+  } = { id };
+
+  const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET_KEY, {
+    expiresIn: "2m",
+  });
+  const refreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET_KEY, {
+    expiresIn: "7d",
+  });
+  await UserModel.findByIdAndUpdate(id, { accessToken, refreshToken });
+
+  res.redirect(
+    `${FRONTEND_URL}?accessToken=${accessToken}&refreshToken${refreshToken}`
+  );
+};
+
 // * exports
-export { register, login, logout };
+export { register, login, logout, googleAuth };
