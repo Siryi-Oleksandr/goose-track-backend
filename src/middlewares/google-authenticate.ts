@@ -24,9 +24,9 @@ const googleParams: {
 };
 
 const googleCallback = async (
-  req: Request,
-  accessToken: string,
-  refreshToken: string,
+  _req: Request,
+  _accessToken: string,
+  _refreshToken: string,
   profile: any,
   done: VerifyCallback
 ) => {
