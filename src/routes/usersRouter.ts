@@ -6,6 +6,7 @@ import {
   getCurrentUser,
   update,
   changePassword,
+  googleAuth,
 } from "../controllers/userControllers";
 import {
   joiRegisterSchema,
@@ -13,9 +14,18 @@ import {
   joiUpdateUserSchema,
   joiUserPasswordSchema,
 } from "../helpers";
-import { isValidBody, authenticate, upload } from "../middlewares";
+import { isValidBody, authenticate, upload, passport } from "../middlewares";
 
 const router = express.Router();
+
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["email", "profile"] })
+);
+router.get(
+  "/google/callback",
+  passport.authenticate("google", { session: false }, googleAuth)
+);
 
 router.post("/register", isValidBody(joiRegisterSchema), register);
 router.post("/login", isValidBody(joiLoginSchema), login);
