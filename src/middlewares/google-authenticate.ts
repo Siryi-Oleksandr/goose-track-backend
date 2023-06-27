@@ -31,19 +31,21 @@ const googleCallback = async (
   done: VerifyCallback
 ) => {
   try {
-    const { email, displayName, coverPhoto } = profile;
+    const { email, displayName, picture } = profile;
 
     const user = await UserModel.findOne({ email });
     if (user) {
       done(null, user);
     }
+
     const password = await bcrypt.hash(nanoid(), 10);
     const newUser = await UserModel.create({
       email,
       password,
       name: displayName,
-      avatarURL: coverPhoto,
+      avatarURL: picture,
     });
+
     done(null, newUser);
   } catch (error) {
     done(error, false);

@@ -193,8 +193,11 @@ const googleAuth = async (req: any, res: Response) => {
   });
   await UserModel.findByIdAndUpdate(id, { accessToken, refreshToken });
 
+  const day = new Date();
+  const today = `${day.getFullYear()}-${day.getMonth() + 1}-${day.getDate()}`;
+
   res.redirect(
-    `${FRONTEND_URL}?accessToken=${accessToken}&refreshToken${refreshToken}`
+    `${FRONTEND_URL}/${today}?accessToken=${accessToken}&refreshToken${refreshToken}`
   );
 };
 
