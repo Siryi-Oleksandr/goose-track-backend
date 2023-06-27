@@ -1,0 +1,1364 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0.0",
+    "title": "Swagger test",
+    "description": "Showing off swagger-ui-express"
+  },
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "servers": [
+    { "url": "http://localhost:3001" },
+    {
+      "url": "https://goosetrack-backend.onrender.com"
+    }
+  ],
+  "tags": [
+    {
+      "name": "task",
+      "description": "add task"
+    },
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "Reviews",
+      "description": "Reviews endpoints"
+    }
+  ],
+
+  "paths": {
+    "/": {
+      "post": {
+        "tags": ["task"],
+        "summary": "add task",
+
+        "parameters": [],
+
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createTaskRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tasks": {
+      "get": {
+        "tags": ["Tasks"],
+        "summary": "Returns a list of all tasks by parameters.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "title",
+            "required": true,
+            "example": 7,
+            "schema": {
+              "type": "String"
+            }
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "type": "String"
+            }
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "type": "String"
+            }
+          },
+          {
+            "in": "query",
+            "name": "priority",
+            "schema": {
+              "type": "String"
+            }
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "schema": {
+              "type": "String"
+            }
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "schema": {
+              "type": "String"
+            }
+          },
+          {
+            "in": "query",
+            "name": "owner",
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/searchTaskResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/:taskId": {
+        "patch": {
+          "tags": ["Tasks"],
+          "summary": "Updates an existing task.",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "security": [
+            {
+              "Bearer": []
+            }
+          ],
+          "requestBody": {
+            "description": "Registration's object",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/updateTaskRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/createTaskResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request (invalid request body)",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/badRequestResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized user",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/unauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/forbiddenResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/unauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/conflictResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/users": {
+          "post": {
+            "tags": ["Auth"],
+            "summary": "register user",
+            "parameters": [],
+            "requestBody": {
+              "description": "Registration's object",
+              "required": true,
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/RegistrationRequest"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/:taskId": {
+          "tags": ["Tasks"],
+          "summary": "Updates an existing task.",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "security": [
+            {
+              "Bearer": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Deleted successfully!"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request (invalid request body)",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/badRequestResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized user",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/unauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/forbiddenResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/unauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/conflictResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/login": {
+        "post": {
+          "tags": ["Auth"],
+          "summary": "User login",
+          "security": [
+            {
+              "Bearer": []
+            }
+          ],
+          "requestBody": {
+            "description": "Registration's object",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loginRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/loginResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request (invalid request body)",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/badRequestResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized user",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/unauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/forbiddenResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/unauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/conflictResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/changePassword": {
+        "patch": {
+          "tags": ["Auth"],
+          "summary": "Changes the password.",
+          "security": [
+            {
+              "Bearer": []
+            }
+          ],
+          "requestBody": {
+            "description": "Password change object.",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/changePassRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/changePassResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request (invalid request body)",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/badRequestResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized user",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/unauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/forbiddenResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/unauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/conflictResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "/current": {
+        "get": {
+          "tags": ["Auth"],
+          "summary": "Retrieves an info about current user.",
+          "parameters": [],
+          "security": [
+            {
+              "Bearer": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/currentResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad request (invalid request body)",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/badRequestResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized user",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/unauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/forbiddenResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/unauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/conflictResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/api/auth/user": {
+        "put": {
+          "tags": ["Auth"],
+          "summary": "Update user info and upload avatar",
+          "security": [
+            {
+              "Bearer": []
+            }
+          ],
+          "requestBody": {
+            "description": "User info and avatar upload",
+            "required": true,
+            "content": {
+              "multipart/form-data": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "avatar": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/updateUserInfoRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/RegistrationResponse"
+                  }
+                }
+              }
+            },
+            "400": {
+              "description": "Bad Request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/badRequestResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/unauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/forbiddenResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not Found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/notFoundResponse"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Conflict",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/conflictResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/logout": {
+        "post": {
+          "tags": ["Auth"],
+          "summary": "Logout.",
+          "parameters": [],
+          "security": [
+            {
+              "Bearer": []
+            }
+          ],
+          "responses": {
+            "204": {
+              "description": "No Content"
+            },
+            "400": {
+              "description": "Bad request (invalid request body)",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/badRequestResponse"
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized user",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/unauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/forbiddenResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/unauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/conflictResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "createTaskRequest": {
+          "type": "object",
+          "required": [
+            "title",
+            "start",
+            "end",
+            "date",
+            "priority",
+            "category",
+            "owner"
+          ],
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Title of a task.",
+              "example": "New Task"
+            },
+            "start": {
+              "type": "string",
+              "description": "Start time. In `HH:mm` format.",
+              "example": "09:00"
+            },
+            "end": {
+              "type": "string",
+              "description": "End time. In `HH:mm` format. Must be greater than `start`.",
+              "example": "17:00"
+            },
+            "date": {
+              "type": "string",
+              "description": "Day on which to schedule a task. In [ISO 8601 date format](https://en.wikipedia.org/wiki/ISO_8601).",
+              "example": "2023-07-15"
+            },
+            "priority": {
+              "type": "string",
+              "description": "Priority of a task. Possible values: `\"low\", \"medium\", \"high\"`",
+              "enum": ["low", "medium", "high"],
+              "example": "medium"
+            },
+            "category": {
+              "type": "string",
+              "enum": ["to-do", "in-progress", "done"],
+              "description": "The category of a task. Possible values: `\"to-do\", \"in-progress\", \"done\"`",
+              "example": "to-do"
+            },
+            "owner": {
+              "type": "string",
+              "description": "The owner of a task.",
+              "example": "John Doe"
+            }
+          }
+        },
+        "RegistrationRequest": {
+          "type": "object",
+          "required": ["email", "password", "name"],
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email",
+              "example": "efpyi@example.com"
+            },
+            "password": {
+              "type": "string",
+              "description": "User's password",
+              "example": "qwerty123"
+            },
+            "name": {
+              "type": "string",
+              "description": "User's name"
+            },
+
+            "refreshToken": {
+              "type": "string"
+            }
+          }
+        },
+        "RegistrationResponse": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "example": "success"
+            },
+            "code": {
+              "type": "integer",
+              "example": 201
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Alexey"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "aqweqwe@gmail.com"
+                }
+              }
+            }
+          }
+        },
+        "changePassRequest": {
+          "type": "object",
+          "required": ["old_password", "new_password"],
+          "properties": {
+            "old_password": {
+              "type": "string",
+              "example": "qwerty123"
+            },
+            "new_password": {
+              "type": "string",
+              "example": "123qwerty"
+            }
+          }
+        },
+        "refreshRequest": {
+          "type": "object",
+          "required": ["refreshToken"],
+          "properties": {
+            "refreshToken": {
+              "type": "string",
+              "example": "eyJcsa15c1sa515csa54....."
+            }
+          }
+        },
+        "refreshResponse": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "example": "success"
+            },
+            "code": {
+              "type": "integer",
+              "example": 200
+            },
+            "accessToken": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIs....."
+            },
+            "refreshToken": {
+              "type": "string",
+              "example": "eyJcsa15c1sa515csa54....."
+            }
+          }
+        },
+        "unauthorizedResponse": {
+          "type": "object",
+          "items": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            }
+          },
+          "example": {
+            "message": "Unauthorized"
+          }
+        },
+        "verifyResponse": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "example": "success"
+            },
+            "code": {
+              "type": "integer",
+              "example": 200
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Verification email sent"
+                }
+              }
+            }
+          }
+        },
+        "currentResponse": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "example": "success"
+            },
+            "code": {
+              "type": "integer",
+              "example": 200
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "Goose"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email",
+                  "example": "goose@track.com"
+                },
+                "avatarURL": {
+                  "type": "string",
+                  "example": "https://stig89.github.io/GooseTrack-frontend/static/media/GooseLogo@2x.3c0470b19aa18aaef0d8.png"
+                },
+                "birthday": {
+                  "type": "string",
+                  "format": "date-time",
+                  "example": "2023-06-09T22:07:46.170Z"
+                },
+                "phone": {
+                  "type": "string",
+                  "example": "+123564689"
+                },
+                "skype": {
+                  "type": "string",
+                  "example": "@Goose"
+                },
+                "createdAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "example": "2023-06-09T22:07:46.176Z"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "example": "2023-06-09T22:17:38.953Z"
+                }
+              }
+            }
+          }
+        },
+        "updateTaskRequest": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "Title of a task.",
+              "example": "New Task"
+            },
+            "start": {
+              "type": "string",
+              "description": "Start time. In `HH:mm` format.",
+              "example": "09:00"
+            },
+            "end": {
+              "type": "string",
+              "description": "End time. In `HH:mm` format. Must be greater than `start`.",
+              "example": "17:00"
+            },
+            "date": {
+              "type": "string",
+              "description": "Day on which to schedule a task. In [ISO 8601 date format](https://en.wikipedia.org/wiki/ISO_8601).",
+              "example": "2023-07-15"
+            },
+            "priority": {
+              "type": "string",
+              "description": "Priority of a task. Possible values: `\"low\", \"medium\", \"high\"`",
+              "enum": ["low", "medium", "high"],
+              "example": "medium"
+            },
+            "category": {
+              "type": "string",
+              "enum": ["to-do", "in-progress", "done"],
+              "description": "The category of a task. Possible values: `\"to-do\", \"in-progress\", \"done\"`",
+              "example": "to-do"
+            }
+          }
+        },
+        "createReviewRequest": {
+          "type": "object",
+          "required": ["rating", "required"],
+          "properties": {
+            "rating": {
+              "type": "number",
+              "description": "Rating."
+            },
+            "comment": {
+              "type": "string",
+              "description": "Comment",
+              "example": "GooseTrack the best!"
+            }
+          }
+        },
+        "createReviewResponse": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "description": "Status of request",
+              "example": "success"
+            },
+            "code": {
+              "type": "integer",
+              "example": 201
+            },
+            "data": {
+              "type": "object",
+              "properties": {
+                "rating": {
+                  "type": "integer"
+                },
+                "comment": {
+                  "type": "string",
+                  "description": "Comment",
+                  "example": "GooseTrack the best!"
+                },
+                "owner": {
+                  "type": "string",
+                  "example": "1346464sdasd48464asd"
+                },
+                "_id": {
+                  "type": "string",
+                  "example": "aasdfdfd77979797sd9f797sdf"
+                },
+                "createdAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "example": "2023-06-09T22:43:06.511Z"
+                },
+                "updatedAt": {
+                  "type": "string",
+                  "format": "date-time",
+                  "example": "2023-06-09T22:43:06.511Z"
+                }
+              }
+            }
+          }
+        },
+        "loginRequest": {
+          "type": "object",
+          "required": ["email", "password"],
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email"
+            },
+            "password": {
+              "type": "string",
+              "description": "User's password",
+              "example": "qwerty123"
+            }
+          }
+        },
+        "loginResponse": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "example": "success"
+            },
+            "code": {
+              "type": "integer",
+              "example": 201
+            },
+            "accessToken": {
+              "type": "string",
+              "example": "eyJhbGciOiJIUzI1NiIs....."
+            },
+            "refreshToken": {
+              "type": "string",
+              "example": "eyJcsa15c1sa515csa54....."
+            }
+          }
+        },
+        "changePassResponse": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "example": "success"
+            },
+            "code": {
+              "type": "integer",
+              "example": 200
+            },
+            "data": {
+              "type": "string",
+              "example": true
+            }
+          }
+        },
+        "badRequestResponse": {
+          "type": "object",
+          "items": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            }
+          },
+          "example": {
+            "message": "Bad Request."
+          }
+        },
+
+        "createTaskResponse": {
+          "type": "object",
+          "items": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "start": {
+                "type": "string"
+              },
+              "end": {
+                "type": "string"
+              },
+              "date": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "priority": {
+                "type": "string",
+                "enum": ["low", "medium", "high"]
+              },
+              "category": {
+                "type": "string",
+                "enum": ["to-do", "in-progress", "done"]
+              },
+              "owner": {
+                "type": "string"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          },
+          "example": {
+            "_id": "1",
+            "title": "Task 1",
+            "start": "09:00",
+            "end": "10:00",
+            "date": "2023-06-10T00:00:00Z",
+            "priority": "medium",
+            "category": "to-do",
+            "owner": "john@example.com",
+            "createdAt": "2023-06-09T14:30:00Z",
+            "updatedAt": "2023-06-09T15:45:00Z"
+          }
+        },
+        "searchTaskResponse": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string"
+              },
+              "title": {
+                "type": "string"
+              },
+              "start": {
+                "type": "string"
+              },
+              "end": {
+                "type": "string"
+              },
+              "date": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "priority": {
+                "type": "string",
+                "enum": ["low", "medium", "high"]
+              },
+              "category": {
+                "type": "string",
+                "enum": ["to-do", "in-progress", "done"]
+              },
+              "owner": {
+                "type": "string"
+              },
+              "createdAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updatedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "year": {
+                "type": "integer",
+                "example": 2023
+              },
+              "month": {
+                "type": "integer",
+                "example": 7
+              },
+              "day": {
+                "type": "integer",
+                "example": 7
+              }
+            }
+          },
+          "example": {
+            "_id": "1",
+            "title": "Task 1",
+            "start": "09:00",
+            "end": "10:00",
+            "date": "2023-06-10T00:00:00Z",
+            "priority": "medium",
+            "category": "to-do",
+            "owner": "john@example.com",
+            "createdAt": "2023-06-09T14:30:00Z",
+            "updatedAt": "2023-06-09T15:45:00Z",
+            "year": 2023,
+            "month": 7,
+            "day": 7
+          }
+        },
+        "notFoundResponse": {
+          "type": "object",
+          "items": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            }
+          },
+          "example": {
+            "message": "Not found"
+          }
+        },
+        "forbiddenResponse": {
+          "type": "object",
+          "items": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            }
+          },
+          "example": {
+            "message": "Forbidden"
+          }
+        },
+        "conflictResponse": {
+          "type": "object",
+          "items": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            }
+          },
+          "example": {
+            "message": "Conflict"
+          }
+        }
+      },
+      "securitySchemes": {
+        "Bearer": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    }
+  }
+}

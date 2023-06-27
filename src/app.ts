@@ -6,6 +6,8 @@ dotenv.config();
 import tasksRouter from "./routes/tasksRouter";
 import usersRouter from "./routes/usersRouter";
 import reviewsRouter from "./routes/reviewsRouter";
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "./swagger.json";
 
 const app = express();
 
@@ -20,6 +22,8 @@ app.use(express.json());
 app.use("/", usersRouter);
 app.use("/tasks", tasksRouter);
 app.use("/reviews", reviewsRouter);
+// swaggerRouter
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // *** error handlers:
 app.use((_req: any, res: Response) => {
