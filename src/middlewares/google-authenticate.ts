@@ -42,7 +42,7 @@ const googleCallback = async (
       email,
       password,
       name: displayName,
-      coverPhoto,
+      avatarURL: coverPhoto,
     });
     done(null, newUser);
   } catch (error) {
