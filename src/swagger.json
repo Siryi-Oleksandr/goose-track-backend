@@ -1599,6 +1599,71 @@
           }
         }
       },
+      "getOneReviewResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Status of request",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "example": 201
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "rating": {
+                "type": "integer"
+              },
+              "_id": {
+                "type": "string",
+                "example": "aasdfdfd77979797sd9f797sdf",
+                "description": "Review ID"
+              },
+              "comment": {
+                "type": "string",
+                "description": "Comment",
+                "example": "GooseTrack the best!"
+              },
+              "owner": {
+                "type": "object",
+                "properties": {
+                  "_id": {
+                    "type": "string",
+                    "example": "aasdfdfd77979797sd9f797sdf",
+                    "description": "User ID"
+                  },
+                  "name": {
+                    "type": "string",
+                    "example": "Goose",
+                    "description": "User Name"
+                  },
+                  "avatarURL": {
+                    "type": "string",
+                    "example": "https://stig89.github.io/GooseTrack-frontend/static/media/GooseLogo@2x.3c0470b19aa18aaef0d8.png"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "updateReviewRequest": {
+        "type": "object",
+        "properties": {
+          "rating": {
+            "type": "number",
+            "description": "Rating."
+          },
+          "comment": {
+            "type": "string",
+            "description": "Comment",
+            "example": "GooseTrack the best!"
+          }
+        }
+      },
 
       "createTaskResponse": {
         "type": "object",
