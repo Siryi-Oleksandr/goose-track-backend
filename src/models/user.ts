@@ -15,6 +15,7 @@ interface IUser extends Document {
   skype?: string;
   birthday?: string;
   refreshToken: string;
+  accessToken: string;
   avatarURL: string;
   avatarID: string;
 }
@@ -58,6 +59,11 @@ const userSchema = new Schema<IUser>(
     },
 
     refreshToken: {
+      type: String,
+      default: "",
+    },
+
+    accessToken: {
       type: String,
       default: "",
     },
