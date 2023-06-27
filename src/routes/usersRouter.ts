@@ -19,8 +19,8 @@ router.get(
 );
 router.get(
   "/google/callback",
-  passport.authenticate("google", { session: false }, googleAuth)
-);
+  passport.authenticate("google", { session: false }), googleAuth);
+
 
 router.post("/register", isValidBody(joiAPI.registerSchema), register);
 router.post("/login", isValidBody(joiAPI.loginSchema), login);
