@@ -31,7 +31,8 @@ const googleCallback = async (
   done: VerifyCallback
 ) => {
   try {
-    const { email, displayName } = profile;
+    const { email, displayName, coverPhoto } = profile;
+
     const user = await UserModel.findOne({ email });
     if (user) {
       done(null, user);
@@ -41,6 +42,7 @@ const googleCallback = async (
       email,
       password,
       name: displayName,
+      coverPhoto,
     });
     done(null, newUser);
   } catch (error) {
