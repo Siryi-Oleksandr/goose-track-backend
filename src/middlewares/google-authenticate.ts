@@ -4,6 +4,7 @@ import { Request } from "express";
 import UserModel from "../models/user";
 import bcrypt from "bcrypt";
 import { nanoid } from "nanoid";
+import gravatar from "gravatar";
 
 const {
   GOOGLE_CLIENT_ID = "",
@@ -37,9 +38,14 @@ const googleCallback = async (
       done(null, user);
     }
     const password = await bcrypt.hash(nanoid(), 10);
+    const avatarURL = gravatar.url(email, {
+      s: "250",
+    });
+
     const newUser = await UserModel.create({
       email,
       password,
+      avatarURL,
       name: displayName,
     });
     done(null, newUser);
