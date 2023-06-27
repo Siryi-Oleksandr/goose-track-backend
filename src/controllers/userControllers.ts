@@ -10,6 +10,12 @@ import {
   handleAvatar,
 } from "../helpers";
 import UserModel from "../models/user";
+import jwt from "jsonwebtoken";
+const {
+  ACCESS_TOKEN_SECRET_KEY = "",
+  REFRESH_TOKEN_SECRET_KEY = "",
+  FRONTEND_URL = "",
+} = process.env;
 
 // ******************* API:  /auth  ******************
 
@@ -170,5 +176,38 @@ const changePassword = controllerWrapper(async (req: any, res: Response) => {
   res.json({ message: "password changed successfully" });
 });
 
+// * Google Auth
+
+const googleAuth = async (req: any, res: Response) => {
+  const { _id: id } = req.user;
+
+  const payload: {
+    id: string;
+  } = { id };
+
+  const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET_KEY, {
+    expiresIn: "2m",
+  });
+  const refreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET_KEY, {
+    expiresIn: "7d",
+  });
+  await UserModel.findByIdAndUpdate(id, { accessToken, refreshToken });
+
+  const day = new Date();
+  const today = `${day.getFullYear()}-${day.getMonth() + 1}-${day.getDate()}`;
+
+  res.redirect(
+    `${FRONTEND_URL}/${today}?accessToken=${accessToken}&refreshToken${refreshToken}`
+  );
+};
+
 // * exports
-export { register, login, logout, getCurrentUser, update, changePassword };
+export {
+  register,
+  login,
+  logout,
+  getCurrentUser,
+  update,
+  changePassword,
+  googleAuth,
+};
