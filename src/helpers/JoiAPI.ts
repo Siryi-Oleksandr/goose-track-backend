@@ -118,7 +118,7 @@ class JoiAPI {
 
     phone: Joi.string().pattern(new RegExp(this.phoneRegexp)).messages({
       "string.pattern.base":
-        "The phone number format is incorrect. Please enter in the format +XX-XXX-XXX-XX-XX",
+        "The phone number format is incorrect. Please enter in the format 'XX (XXX) XXX XX XX'",
     }),
 
     skype: Joi.string().pattern(new RegExp(this.skypeNumberRegexp)).messages({

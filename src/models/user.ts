@@ -58,12 +58,7 @@ const userSchema = new Schema<IUser>(
       default: "",
     },
 
-    avatarURL: {
-      type: String,
-      default: "",
-    },
-
-    avatarID: {
+    refreshToken: {
       type: String,
       default: "",
     },
@@ -73,7 +68,12 @@ const userSchema = new Schema<IUser>(
       default: "",
     },
 
-    refreshToken: {
+    avatarURL: {
+      type: String,
+      default: "",
+    },
+
+    avatarID: {
       type: String,
       default: "",
     },
