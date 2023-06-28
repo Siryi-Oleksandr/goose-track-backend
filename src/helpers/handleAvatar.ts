@@ -5,5 +5,6 @@ export async function handleAvatar(path: string): Promise<void> {
   await image
     .autocrop()
     .cover(250, 250, Jimp.HORIZONTAL_ALIGN_CENTER || Jimp.VERTICAL_ALIGN_MIDDLE)
+    .quality(60)
     .write(path);
 }
