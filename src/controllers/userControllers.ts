@@ -179,11 +179,11 @@ const changePassword = controllerWrapper(async (req: any, res: Response) => {
 // * Google Auth
 
 const googleAuth = async (req: any, res: Response) => {
-  const { _id: id } = req.user;
+  const { _id } = req.user;
 
   const payload: {
-    id: string;
-  } = { id };
+    _id: string;
+  } = { _id };
 
   const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET_KEY, {
     expiresIn: "2m",
@@ -191,13 +191,10 @@ const googleAuth = async (req: any, res: Response) => {
   const refreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET_KEY, {
     expiresIn: "7d",
   });
-  await UserModel.findByIdAndUpdate(id, { accessToken, refreshToken });
-
-  const day = new Date();
-  const today = `${day.getFullYear()}-${day.getMonth() + 1}-${day.getDate()}`;
+  await UserModel.findByIdAndUpdate(_id, { accessToken, refreshToken });
 
   res.redirect(
-    `${FRONTEND_URL}/${today}?accessToken=${accessToken}&refreshToken${refreshToken}`
+    `${FRONTEND_URL}?accessToken=${accessToken}&refreshToken${refreshToken}`
   );
 };
 
