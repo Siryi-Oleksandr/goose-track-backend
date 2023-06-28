@@ -238,96 +238,6 @@
         }
       }
     },
-    "/tasks/:taskId/:{delete{}}": {
-      "delete": {
-        "tags": ["Tasks"],
-        "summary": "Updates an existing task.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Deleted successfully!"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request (invalid request body)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/badRequestResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/forbiddenResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/conflictResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-
     "/tasks/category/:taskId": {
       "patch": {
         "tags": ["Tasks"],
@@ -440,87 +350,176 @@
         }
       }
     },
-    "/tasks/:taskId": {
-      "tags": ["Tasks"],
-      "summary": "Updates an existing task.",
-      "parameters": [
-        {
-          "in": "path",
-          "name": "id",
-          "required": true,
-          "schema": {
-            "type": "string"
+    "/tasks/:taskId:{patch{},delete{}}": {
+      "patch": {
+        "tags": ["Tasks"],
+        "summary": "Updates an existing task.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           }
-        }
-      ],
-      "security": [
-        {
-          "Bearer": []
-        }
-      ],
-      "responses": {
-        "200": {
-          "description": "Successful operation",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string",
-                    "example": "Deleted successfully!"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Deleted successfully!"
+                    }
                   }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
                 }
               }
             }
           }
         },
-        "400": {
-          "description": "Bad request (invalid request body)",
-          "content": {
-            "application/json": {
+        "delete": {
+          "tags": ["Tasks"],
+          "summary": "Updates an existing task.",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
               "schema": {
-                "$ref": "#/components/schemas/badRequestResponse"
+                "type": "string"
               }
             }
-          }
-        },
-        "401": {
-          "description": "Unauthorized user",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/unauthorizedResponse"
-              }
+          ],
+          "security": [
+            {
+              "Bearer": []
             }
-          }
-        },
-        "403": {
-          "description": "Forbidden request",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/forbiddenResponse"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful operation",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string",
+                        "example": "Deleted successfully!"
+                      }
+                    }
+                  }
+                }
               }
-            }
-          }
-        },
-        "404": {
-          "description": "Not found",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/unauthorizedResponse"
+            },
+            "400": {
+              "description": "Bad request (invalid request body)",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/badRequestResponse"
+                  }
+                }
               }
-            }
-          }
-        },
-        "409": {
-          "description": "Not found",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/conflictResponse"
+            },
+            "401": {
+              "description": "Unauthorized user",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/unauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "403": {
+              "description": "Forbidden request",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/forbiddenResponse"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/unauthorizedResponse"
+                  }
+                }
+              }
+            },
+            "409": {
+              "description": "Not found",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/conflictResponse"
+                  }
+                }
               }
             }
           }
