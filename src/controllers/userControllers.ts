@@ -29,6 +29,12 @@ interface RequestBody {
   avatarURL: string;
 }
 
+interface IUser {
+  userId: string;
+  userName: string;
+  userEmail: string;
+}
+
 //* POST /register
 const register = controllerWrapper(async (req: Request, res: Response) => {
   const { email, password }: RequestBody = req.body;
@@ -51,10 +57,11 @@ const register = controllerWrapper(async (req: Request, res: Response) => {
   });
 
   const { accessToken, refreshToken } = assignTokens(newUser);
-  await UserModel.findByIdAndUpdate(newUser._id, { refreshToken });
+  await UserModel.findByIdAndUpdate(newUser._id, { accessToken, refreshToken });
 
   res.status(201).json({
     accessToken,
+    refreshToken,
     user: {
       name: newUser.name,
       email: newUser.email,
@@ -80,10 +87,11 @@ const login = controllerWrapper(async (req: Request, res: Response) => {
   }
 
   const { accessToken, refreshToken } = assignTokens(user);
-  await UserModel.findByIdAndUpdate(user._id, { refreshToken });
+  await UserModel.findByIdAndUpdate(user._id, { accessToken, refreshToken });
 
   res.json({
     accessToken,
+    refreshToken,
     user: {
       name: user.name,
       email: user.email,
@@ -95,10 +103,38 @@ const login = controllerWrapper(async (req: Request, res: Response) => {
   });
 });
 
+//* POST /refresh
+const refresh = controllerWrapper(async (req: Request, res: Response) => {
+  const { refreshToken: token } = req.body;
+
+  try {
+    const { userId, userName, userEmail } = jwt.verify(
+      token,
+      REFRESH_TOKEN_SECRET_KEY
+    ) as IUser;
+
+    const isExist = await UserModel.findOne({ refreshToken: token });
+
+    if (!isExist) {
+      throw new HttpError(403, "Refresh token invalid");
+    }
+
+    const { accessToken, refreshToken } = assignTokens({
+      _id: userId,
+      name: userName,
+      email: userEmail,
+    });
+
+    res.json({ accessToken, refreshToken });
+  } catch (error: any) {
+    throw new HttpError(403, error.message);
+  }
+});
+
 //* POST /logout
 const logout = controllerWrapper(async (req: any, res: Response) => {
   const { _id } = req.user;
-  await UserModel.findByIdAndUpdate(_id, { refreshToken: null });
+  await UserModel.findByIdAndUpdate(_id, { refreshToken: "", accessToken: "" });
 
   res.status(200).json({ message: "logout successfull" });
 });
@@ -202,6 +238,7 @@ const googleAuth = async (req: any, res: Response) => {
 export {
   register,
   login,
+  refresh,
   logout,
   getCurrentUser,
   update,

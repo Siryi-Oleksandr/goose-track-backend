@@ -16,6 +16,42 @@ class JoiAPI {
 
   //* Class methods
 
+  public registerSchema = Joi.object({
+    name: Joi.string().min(2).max(35).required().messages({
+      "any.required": "Missing required 'name' field",
+      "string.min": "The length of 'name' must be between 2 and 35 characters",
+      "string.max": "The length of 'name' must be between 2 and 35 characters",
+    }),
+
+    email: Joi.string()
+      .pattern(new RegExp(this.emailRegexp))
+      .required()
+      .messages({ "any.required": "Email is required" }),
+
+    password: Joi.string().min(6).required().messages({
+      "any.required": "Password is required",
+      "string.min": "The length of 'password' must be min 6 characters",
+    }),
+  });
+
+  public loginSchema = Joi.object({
+    email: Joi.string()
+      .pattern(new RegExp(this.emailRegexp))
+      .required()
+      .messages({ "any.required": "Email is required" }),
+
+    password: Joi.string().min(6).required().messages({
+      "any.required": "Password is required",
+      "string.min": "The length of 'password' must be min 6 characters",
+    }),
+  });
+
+  public refreshSchema = Joi.object({
+    refreshToken: Joi.string()
+      .required()
+      .messages({ "any.required": "refreshToken is required" }),
+  });
+
   public tasksSchema = Joi.object({
     title: Joi.string().min(3).max(250).required().messages({
       "any.required": "Missing required 'title' field",
@@ -49,36 +85,6 @@ class JoiAPI {
       .valid(...this.categoryType)
       .required()
       .messages({ "any.required": "Missing required 'category' field" }),
-  });
-
-  public registerSchema = Joi.object({
-    name: Joi.string().min(2).max(35).required().messages({
-      "any.required": "Missing required 'name' field",
-      "string.min": "The length of 'name' must be between 2 and 35 characters",
-      "string.max": "The length of 'name' must be between 2 and 35 characters",
-    }),
-
-    email: Joi.string()
-      .pattern(new RegExp(this.emailRegexp))
-      .required()
-      .messages({ "any.required": "Email is required" }),
-
-    password: Joi.string().min(6).required().messages({
-      "any.required": "Password is required",
-      "string.min": "The length of 'password' must be min 6 characters",
-    }),
-  });
-
-  public loginSchema = Joi.object({
-    email: Joi.string()
-      .pattern(new RegExp(this.emailRegexp))
-      .required()
-      .messages({ "any.required": "Email is required" }),
-
-    password: Joi.string().min(6).required().messages({
-      "any.required": "Password is required",
-      "string.min": "The length of 'password' must be min 6 characters",
-    }),
   });
 
   public reviewsSchema = Joi.object({

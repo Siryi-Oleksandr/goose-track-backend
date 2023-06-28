@@ -14,10 +14,10 @@ interface IUser extends Document {
   phone?: string;
   skype?: string;
   birthday?: string;
+  avatarURL?: string;
+  avatarID?: string;
   refreshToken: string;
   accessToken: string;
-  avatarURL: string;
-  avatarID: string;
 }
 
 const userSchema = new Schema<IUser>(

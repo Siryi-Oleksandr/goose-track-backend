@@ -2,6 +2,7 @@ import express from "express";
 import {
   register,
   login,
+  refresh,
   logout,
   getCurrentUser,
   update,
@@ -9,7 +10,7 @@ import {
   googleAuth,
 } from "../controllers/userControllers";
 import { joiAPI } from "../helpers";
-import { isValidBody, authenticate, upload, passport } from "../middlewares";
+import { isValidBody, auth, upload, passport } from "../middlewares";
 
 const router = express.Router();
 
@@ -19,23 +20,25 @@ router.get(
 );
 router.get(
   "/google/callback",
-  passport.authenticate("google", { session: false }), googleAuth);
-
+  passport.authenticate("google", { session: false }),
+  googleAuth
+);
 
 router.post("/register", isValidBody(joiAPI.registerSchema), register);
 router.post("/login", isValidBody(joiAPI.loginSchema), login);
-router.post("/logout", authenticate, logout);
-router.get("/current", authenticate, getCurrentUser);
+router.post("/refresh", isValidBody(joiAPI.refreshSchema), refresh);
+router.post("/logout", auth, logout);
+router.get("/current", auth, getCurrentUser);
 router.patch(
   "/update",
-  authenticate,
+  auth,
   upload.single("avatar"),
   isValidBody(joiAPI.updateUserSchema),
   update
 );
 router.patch(
   "/changePassword",
-  authenticate,
+  auth,
   isValidBody(joiAPI.userPasswordSchema),
   changePassword
 );

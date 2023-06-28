@@ -8,12 +8,12 @@ import {
   updateTaskCategory,
   getStatistics,
 } from "../controllers/taskControllers";
-import { isValidId, isValidBody, authenticate } from "../middlewares";
+import { isValidId, isValidBody, auth } from "../middlewares";
 import { joiAPI } from "../helpers";
 
 const router = express.Router();
 
-router.use(authenticate); // checks user before all routes and actions
+router.use(auth); // checks user before all routes and actions
 
 router.get("/", getTasks);
 router.get("/statistics", getStatistics);
