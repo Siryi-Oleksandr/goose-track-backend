@@ -29,7 +29,7 @@
   ],
 
   "paths": {
-    "/tasks/{get{},post{}}": {
+    "/tasks/{get{}}": {
       "get": {
         "tags": ["Tasks"],
         "summary": "Returns a list of all tasks by parameters.",
@@ -153,7 +153,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/tasks/{post{}}": {
       "post": {
         "tags": ["Tasks"],
         "summary": "Returns a list of all tasks by parameters.",
@@ -238,6 +240,7 @@
         }
       }
     },
+
     "/tasks/category/:taskId": {
       "patch": {
         "tags": ["Tasks"],
@@ -350,7 +353,7 @@
         }
       }
     },
-    "/tasks/:taskId:{patch{},delete{}}": {
+    "/tasks/:taskId:{patch{}}": {
       "patch": {
         "tags": ["Tasks"],
         "summary": "Updates an existing task.",
@@ -436,89 +439,92 @@
               }
             }
           }
-        },
-        "delete": {
-          "tags": ["Tasks"],
-          "summary": "Updates an existing task.",
-          "parameters": [
-            {
-              "in": "path",
-              "name": "id",
-              "required": true,
-              "schema": {
-                "type": "string"
-              }
+        }
+      }
+    },
+
+    "/tasks/:taskId:{delete{}}": {
+      "delete": {
+        "tags": ["Tasks"],
+        "summary": "Updates an existing task.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
-          ],
-          "security": [
-            {
-              "Bearer": []
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Successful operation",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "message": {
-                        "type": "string",
-                        "example": "Deleted successfully!"
-                      }
+          }
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Deleted successfully!"
                     }
                   }
                 }
               }
-            },
-            "400": {
-              "description": "Bad request (invalid request body)",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/badRequestResponse"
-                  }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
                 }
               }
-            },
-            "401": {
-              "description": "Unauthorized user",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/unauthorizedResponse"
-                  }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
                 }
               }
-            },
-            "403": {
-              "description": "Forbidden request",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/forbiddenResponse"
-                  }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
                 }
               }
-            },
-            "404": {
-              "description": "Not found",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/unauthorizedResponse"
-                  }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
                 }
               }
-            },
-            "409": {
-              "description": "Not found",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "$ref": "#/components/schemas/conflictResponse"
-                  }
+            }
+          },
+          "409": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
                 }
               }
             }
@@ -526,6 +532,7 @@
         }
       }
     },
+
     "/login": {
       "post": {
         "tags": ["Auth"],
