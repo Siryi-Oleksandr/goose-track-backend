@@ -113,10 +113,6 @@ const refresh = controllerWrapper(async (req: Request, res: Response) => {
       REFRESH_TOKEN_SECRET_KEY
     ) as IUser;
 
-    if (!userId) {
-      throw new HttpError(401, "Not authorized");
-    }
-
     const isExist = await UserModel.findOne({ refreshToken: token });
 
     if (!isExist) {
