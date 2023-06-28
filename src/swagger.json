@@ -29,7 +29,7 @@
   ],
 
   "paths": {
-    "/tasks/": {
+    "/tasks/{get{},post{}}": {
       "get": {
         "tags": ["Tasks"],
         "summary": "Returns a list of all tasks by parameters.",
