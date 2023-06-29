@@ -116,20 +116,29 @@ class JoiAPI {
       .required()
       .messages({ "any.required": "Email is required" }),
 
-    phone: Joi.string().pattern(new RegExp(this.phoneRegexp)).messages({
-      "string.pattern.base":
-        "The phone number format is incorrect. Please enter in the format 'XX (XXX) XXX XX XX'",
-    }),
+    phone: Joi.string()
+      .allow("")
+      .pattern(new RegExp(this.phoneRegexp))
+      .messages({
+        "string.pattern.base":
+          "The phone number format is incorrect. Please enter in the format 'XX (XXX) XXX XX XX'",
+      }),
 
-    skype: Joi.string().pattern(new RegExp(this.skypeNumberRegexp)).messages({
-      "string.pattern.base":
-        "The skype number format is incorrect. Please enter in the format +XX-XXX-XXX-XX-XX",
-    }),
+    skype: Joi.string()
+      .allow("")
+      .pattern(new RegExp(this.skypeNumberRegexp))
+      .messages({
+        "string.pattern.base":
+          "The skype number format is incorrect. Please enter in the format +XX-XXX-XXX-XX-XX",
+      }),
 
-    birthday: Joi.string().pattern(new RegExp(this.birthdayRegexp)).messages({
-      "string.pattern.base":
-        "The birthday format is incorrect. Please enter in the format 25/08/2002",
-    }),
+    birthday: Joi.string()
+      .allow("")
+      .pattern(new RegExp(this.birthdayRegexp))
+      .messages({
+        "string.pattern.base":
+          "The birthday format is incorrect. Please enter in the format 25/08/2002",
+      }),
   });
 
   public taskCategorySchema = Joi.object({

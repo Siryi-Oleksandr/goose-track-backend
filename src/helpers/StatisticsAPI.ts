@@ -29,9 +29,9 @@ class StatisticsAPI {
     });
 
     let statistics: IStatistic = {
-      todo: Math.round((todo / allTasks) * 100),
-      inProgress: Math.round((inProgress / allTasks) * 100),
-      done: Math.round((done / allTasks) * 100),
+      todo: Math.round((todo / allTasks) * 100) || 0,
+      inProgress: Math.round((inProgress / allTasks) * 100) || 0,
+      done: Math.round((done / allTasks) * 100) || 0,
       allTasks,
     };
 
