@@ -12,7 +12,7 @@ import {
 import UserModel from "../models/user";
 import jwt from "jsonwebtoken";
 const {
-  ACCESS_TOKEN_SECRET_KEY = "",
+  // ACCESS_TOKEN_SECRET_KEY = "",
   REFRESH_TOKEN_SECRET_KEY = "",
   FRONTEND_URL = "",
 } = process.env;
@@ -143,7 +143,10 @@ const logout = controllerWrapper(async (req: any, res: Response) => {
 const getCurrentUser = controllerWrapper(async (req: any, res: Response) => {
   const { email, name, phone, skype, birthday, avatarURL, accessToken } =
     req.user;
-  res.json({ email, name, phone, skype, birthday, avatarURL, accessToken });
+  res.json({
+    accessToken,
+    user: { email, name, phone, skype, birthday, avatarURL },
+  });
 });
 
 //* PATCH /update
