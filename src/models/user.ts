@@ -3,9 +3,6 @@ import { handleMongooseError } from "../helpers";
 
 const emailRegexp: RegExp =
   /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
-const phoneRegexp: RegExp = /^(\d{2})\s\((\d{3})\)\s(\d{3})\s(\d{2})\s(\d{2})$/;
-const skypeNumberRegexp: RegExp = /^\+[1-9]\d{0,2}[.-]?\d{1,14}$/;
-const birthdayRegexp: RegExp = /^\d{2}\/\d{2}\/\d{4}$/;
 
 interface IUser extends Document {
   name: string;
@@ -42,19 +39,16 @@ const userSchema = new Schema<IUser>(
 
     phone: {
       type: String,
-      match: phoneRegexp,
       default: "",
     },
 
     skype: {
       type: String,
-      match: skypeNumberRegexp,
       default: "",
     },
 
     birthday: {
       type: String,
-      match: birthdayRegexp,
       default: "",
     },
 

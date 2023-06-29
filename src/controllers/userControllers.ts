@@ -136,33 +136,6 @@ const refresh = controllerWrapper(async (req: Request, res: Response) => {
   }
 });
 
-//  const { refreshToken: token } = req.body;
-//  try {
-//    const { id } = jwt.verify(token, REFRESH_SECRET_KEY);
-//    const isExist = await User.findOne({ refreshToken: token });
-//    if (!isExist) {
-//      throw HttpError(403, "Token invalid");
-//    }
-
-//    const payload = {
-//      id,
-//    };
-
-//    const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, {
-//      expiresIn: "2m",
-//    });
-//    const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
-//      expiresIn: "7d",
-//    });
-
-//    res.json({
-//      accessToken,
-//      refreshToken,
-//    });
-//  } catch (error) {
-//    throw HttpError(403, error.message);
-//  }
-
 //* POST /logout
 const logout = controllerWrapper(async (req: any, res: Response) => {
   const { _id } = req.user;
@@ -186,10 +159,12 @@ const update = controllerWrapper(async (req: any, res: Response) => {
   const { _id, avatarID, avatarURL, email } = req.user;
   const { email: newEmail } = req.body;
 
-  const existedUser = await UserModel.findOne({ newEmail });
+  const existedUser = await UserModel.findOne({ email: newEmail });
+
   if (existedUser && email !== newEmail) {
     throw new HttpError(409, `Email "${newEmail}" already exists`);
   }
+
   let newAvatarURL = avatarURL;
   let newAvatarID = avatarID;
 
@@ -217,7 +192,8 @@ const update = controllerWrapper(async (req: any, res: Response) => {
     },
     {
       new: true,
-      select: "-password -refreshToken -createdAt -updatedAt -avatarID",
+      select:
+        "-password -refreshToken -createdAt -updatedAt -avatarID -accessToken",
     }
   );
 
