@@ -141,8 +141,9 @@ const logout = controllerWrapper(async (req: any, res: Response) => {
 
 //* GET /current
 const getCurrentUser = controllerWrapper(async (req: any, res: Response) => {
-  const { email, name, phone, skype, birthday, avatarURL } = req.user;
-  res.json({ email, name, phone, skype, birthday, avatarURL });
+  const { email, name, phone, skype, birthday, avatarURL, accessToken } =
+    req.user;
+  res.json({ email, name, phone, skype, birthday, avatarURL, accessToken });
 });
 
 //* PATCH /update
@@ -216,17 +217,14 @@ const changePassword = controllerWrapper(async (req: any, res: Response) => {
 
 const googleAuth = async (req: any, res: Response) => {
   const { _id } = req.user;
+  console.log("googleAuth ctrl user>>>", req.user);
 
-  const payload: {
-    _id: string;
-  } = { _id };
+  // const payload: {
+  //   _id: string;
+  // } = { _id };
 
-  const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET_KEY, {
-    expiresIn: "2m",
-  });
-  const refreshToken = jwt.sign(payload, REFRESH_TOKEN_SECRET_KEY, {
-    expiresIn: "7d",
-  });
+  const { accessToken, refreshToken } = assignTokens(req.user);
+
   await UserModel.findByIdAndUpdate(_id, { accessToken, refreshToken });
 
   res.redirect(
