@@ -35,7 +35,7 @@ const googleCallback = async (
 
     const user = await UserModel.findOne({ email });
     if (user) {
-      done(null, user);
+      done(null, user); // login with google + (res.user = user)
     }
 
     const password = await bcrypt.hash(nanoid(), 10);
