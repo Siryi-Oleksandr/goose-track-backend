@@ -12,7 +12,7 @@ import {
 import UserModel from "../models/user";
 import jwt from "jsonwebtoken";
 const {
-  ACCESS_TOKEN_SECRET_KEY = "",
+  // ACCESS_TOKEN_SECRET_KEY = "",
   REFRESH_TOKEN_SECRET_KEY = "",
   FRONTEND_URL = "",
 } = process.env;
