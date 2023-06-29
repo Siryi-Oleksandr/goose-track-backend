@@ -143,7 +143,10 @@ const logout = controllerWrapper(async (req: any, res: Response) => {
 const getCurrentUser = controllerWrapper(async (req: any, res: Response) => {
   const { email, name, phone, skype, birthday, avatarURL, accessToken } =
     req.user;
-  res.json({ email, name, phone, skype, birthday, avatarURL, accessToken });
+  res.json({
+    accessToken,
+    user: { email, name, phone, skype, birthday, avatarURL },
+  });
 });
 
 //* PATCH /update
