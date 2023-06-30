@@ -2,26 +2,30 @@
   "openapi": "3.0.1",
   "info": {
     "version": "1.0.0",
-    "title": "Swagger test",
-    "description": "Showing off swagger-ui-express"
+    "title": "Swagger Goose-Track",
+    "description": "[**Goose-Track**](https://malakhow-alexandr.github.io/Team-Project-Organaizer-Goose-Track/) is an intuitive calendar app that helps you stay organized and on top of your tasks.</br></br>With **Goose-Track**, you can effortlessly _`create`_, _`update`_, and _`delete`_ tasks, as well as _`retrieve tasks for a specific month`_. Additionally, you can personalize your profile by _`updating`_ your information and _`uploading`_ an avatar.</br></br>One of the standout features of **Goose-Track** is the ability for users to _`leave feedback`_ about the app. Whether it's sharing thoughts, suggesting improvements, or expressing appreciation, users can provide valuable insights through their feedback, helping to shape the future development of the app.</br></br>So, go ahead and start using **Goose-Track API** to enhance your calendar experience, organize your schedule, manage your tasks, and stay on top of your commitments. With its user-friendly interface and powerful features, the **Goose-Track API** enables you to make the most of your calendar application and keep track of your busy life. Start using this [application](https://malakhow-alexandr.github.io/Team-Project-Organaizer-Goose-Track/) right away or customize your own integration with this API happily!</br></br>You can also visit the [repository](https://github.com/Siryi-Oleksandr/goose-track-backend) of this application for more detailed information.</br></br>"
   },
   "consumes": ["application/json"],
   "produces": ["application/json"],
+
   "servers": [
     { "url": "http://localhost:3001" },
     {
-      "url": "https://goosetrack-backend.onrender.com"
+      "url": "https://goose-track-verq.onrender.com/"
     }
   ],
+
   "tags": [
-    {
-      "name": "task",
-      "description": "add task"
-    },
     {
       "name": "Auth",
       "description": "Authorization endpoints"
     },
+
+    {
+      "name": "Tasks",
+      "description": "Tasks endpoints"
+    },
+
     {
       "name": "Reviews",
       "description": "Reviews endpoints"
@@ -29,6 +33,496 @@
   ],
 
   "paths": {
+    "/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User registration",
+        "parameters": [],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User login",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/loginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/changePassword": {
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "Changes the password.",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "Password change object.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/changePassRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/changePassResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/current": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Retrieves an info about current user.",
+        "parameters": [],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/currentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/update": {
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "Update user info",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "User info and avatar upload",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "avatar": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateUserInfoRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/notFoundResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Logout.",
+        "parameters": [],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
     "/tasks/{get{}}": {
       "get": {
         "tags": ["Tasks"],
@@ -430,24 +924,7 @@
         }
       }
     },
-    "/register": {
-      "post": {
-        "tags": ["Auth"],
-        "summary": "register user",
-        "parameters": [],
-        "requestBody": {
-          "description": "Registration's object",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/RegistrationRequest"
-              }
-            }
-          }
-        }
-      }
-    },
+
     "/tasks/:taskId:{patch{}}": {
       "patch": {
         "tags": ["Tasks"],
@@ -628,411 +1105,6 @@
       }
     },
 
-    "/login": {
-      "post": {
-        "tags": ["Auth"],
-        "summary": "User login",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "requestBody": {
-          "description": "Registration's object",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/loginRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/loginResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request (invalid request body)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/badRequestResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/forbiddenResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/conflictResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/changePassword": {
-      "patch": {
-        "tags": ["Auth"],
-        "summary": "Changes the password.",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "requestBody": {
-          "description": "Password change object.",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/changePassRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/changePassResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request (invalid request body)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/badRequestResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/forbiddenResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/conflictResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-
-    "/current": {
-      "get": {
-        "tags": ["Auth"],
-        "summary": "Retrieves an info about current user.",
-        "parameters": [],
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/currentResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request (invalid request body)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/badRequestResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/forbiddenResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/conflictResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/update": {
-      "patch": {
-        "tags": ["Auth"],
-        "summary": "Update user info",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "requestBody": {
-          "description": "User info and avatar upload",
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "avatar": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/updateUserInfoRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RegistrationResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/badRequestResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/forbiddenResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/notFoundResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/conflictResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/logout": {
-      "post": {
-        "tags": ["Auth"],
-        "summary": "Logout.",
-        "parameters": [],
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "No Content"
-          },
-          "400": {
-            "description": "Bad request (invalid request body)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/badRequestResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/forbiddenResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/conflictResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/": {
       "get": {
         "tags": ["Reviews"],
@@ -1415,8 +1487,57 @@
       }
     }
   },
+
   "components": {
     "schemas": {
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["name", "email", "password"],
+        "properties": {
+           "name": {
+            "type": "string",
+            "description": "User's name"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+      },
+
+      "RegistrationResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "code": {
+            "type": "integer",
+            "example": 201
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "example": "Alexey"
+              },
+              "email": {
+                "type": "string",
+                "example": "aqweqwe@gmail.com"
+              }
+            }
+          }
+        }
+      },
+
       "createTaskRequest": {
         "type": "object",
         "required": [
@@ -1468,57 +1589,7 @@
           }
         }
       },
-      "RegistrationRequest": {
-        "type": "object",
-        "required": ["email", "password", "name"],
-        "properties": {
-          "email": {
-            "type": "string",
-            "description": "User's email",
-            "format": "email",
-            "example": "efpyi@example.com"
-          },
-          "password": {
-            "type": "string",
-            "description": "User's password",
-            "example": "qwerty123"
-          },
-          "name": {
-            "type": "string",
-            "description": "User's name"
-          },
 
-          "refreshToken": {
-            "type": "string"
-          }
-        }
-      },
-      "RegistrationResponse": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "example": "success"
-          },
-          "code": {
-            "type": "integer",
-            "example": 201
-          },
-          "data": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string",
-                "example": "Alexey"
-              },
-              "email": {
-                "type": "string",
-                "example": "aqweqwe@gmail.com"
-              }
-            }
-          }
-        }
-      },
       "changePassRequest": {
         "type": "object",
         "required": ["old_password", "new_password"],
