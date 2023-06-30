@@ -137,7 +137,7 @@ class JoiAPI {
       .pattern(new RegExp(this.birthdayRegexp))
       .messages({
         "string.pattern.base":
-          "The birthday format is incorrect. Please enter in the format 25/08/2002",
+          "The birthday format is incorrect. Please enter in the format 24/08/1991",
       }),
   });
 

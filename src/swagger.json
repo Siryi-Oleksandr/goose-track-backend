@@ -365,6 +365,102 @@
       }
     },
 
+    "/update": {
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "Update user info",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "User info and avatar upload",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "avatar": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            },
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateUserRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/updateUserResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/notFoundResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
     "/current": {
       "get": {
         "tags": ["Auth"],
@@ -428,102 +524,6 @@
           },
           "409": {
             "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/conflictResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-
-    "/update": {
-      "patch": {
-        "tags": ["Auth"],
-        "summary": "Update user info",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "requestBody": {
-          "description": "User info and avatar upload",
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "avatar": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                }
-              }
-            },
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/updateUserInfoRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RegistrationResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/badRequestResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/forbiddenResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/notFoundResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -1805,6 +1805,94 @@
         }
       },
 
+      "updateUserRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "phone": {
+            "type": "string",
+            "description": "User's phone"
+          },
+          "skype": {
+            "type": "string",
+            "description": "User's skype"
+          },
+          "birthday": {
+            "type": "string",
+            "description": "User's birthday"
+          }
+        },
+        "required": ["name", "email"],
+        "example": {
+          "name": "Alexander Doe",
+          "email": "example@example.com",
+          "skype": "+10888888888",
+          "phone": "38 (073) 000 00 00",
+          "birthday": "24/08/1991"
+        }
+      },
+
+      "updateUserResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "User's id"
+              },
+              "name": {
+                "type": "string",
+                "description": "User's name"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              },
+              "phone": {
+                "type": "string",
+                "description": "User's phone"
+              },
+              "skype": {
+                "type": "string",
+                "description": "User's skype"
+              },
+              "birthday": {
+                "type": "string",
+                "description": "User's birthday"
+              }
+            },
+            "example": {
+              "_id": "6479dbb972171cebb39e9dc4",
+              "name": "Alexander Doe",
+              "email": "example@example.com",
+              "skype": "+10888888888",
+              "phone": "38 (073) 000 00 00",
+              "birthday": "24/08/1991",
+              "avatarUrl": "http://res.cloudinary.com/dsjxdktiz/image/upload/v1688133681/goose-track/iohp56kfliwlgfhyi0qg.jpg"
+            }
+          }
+        }
+      },
+
       "createTaskRequest": {
         "type": "object",
         "required": [
@@ -2064,6 +2152,7 @@
           "message": "Bad Request."
         }
       },
+
       "getReviewResponse": {
         "type": "object",
         "properties": {
@@ -2118,6 +2207,7 @@
           }
         }
       },
+
       "getOneReviewResponse": {
         "type": "object",
         "properties": {
@@ -2169,6 +2259,7 @@
           }
         }
       },
+
       "updateReviewRequest": {
         "type": "object",
         "properties": {
@@ -2239,6 +2330,7 @@
           "updatedAt": "2023-06-09T15:45:00Z"
         }
       },
+
       "searchTaskResponse": {
         "type": "array",
         "items": {
@@ -2309,6 +2401,7 @@
           "day": 7
         }
       },
+
       "notFoundResponse": {
         "type": "object",
         "items": {
@@ -2323,6 +2416,7 @@
           "message": "Not found"
         }
       },
+
       "forbiddenResponse": {
         "type": "object",
         "items": {

@@ -193,7 +193,7 @@ const update = controllerWrapper(async (req: any, res: Response) => {
     {
       new: true,
       select:
-        "-password -refreshToken -createdAt -updatedAt -avatarID -accessToken",
+        "-password -accessToken -refreshToken -avatarID -createdAt -updatedAt ",
     }
   );
 
