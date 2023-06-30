@@ -44,18 +44,18 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RegistrationRequest"
+                "$ref": "#/components/schemas/registrationRequest"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Created",
+            "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegistrationResponse"
+                  "$ref": "#/components/schemas/registrationResponse"
                 }
               }
             }
@@ -118,11 +118,6 @@
       "post": {
         "tags": ["Auth"],
         "summary": "User login",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "requestBody": {
           "description": "Registration's object",
           "required": true,
@@ -186,7 +181,7 @@
             }
           },
           "409": {
-            "description": "Not found",
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -1493,7 +1488,7 @@
 
   "components": {
     "schemas": {
-      "RegistrationRequest": {
+      "registrationRequest": {
         "type": "object",
         "required": ["name", "email", "password"],
         "properties": {
@@ -1516,7 +1511,7 @@
         }
       },
 
-      "RegistrationResponse": {
+      "registrationResponse": {
         "type": "object",
         "properties": {
           "status": {
@@ -1526,6 +1521,81 @@
           "code": {
             "type": "integer",
             "example": 201
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "accessToken": {
+                "type": "string",
+                "example": "1346464sdasd48464asd"
+              },
+              "refreshToken": {
+                "type": "string",
+                "example": "89652ddsdahh48984abn"
+              },
+              "user": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Alex Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "example@example.com"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "example": ""
+                  },
+                  "skype": {
+                    "type": "string",
+                    "example": ""
+                  },
+                  "birthday": {
+                    "type": "string",
+                    "example": ""
+                  },
+                  "avatarURL": {
+                    "type": "string",
+                    "example": "//www.gravatar.com/avatar/f17f20f3bbc4bf95af0e9ee8d3211033?s=250"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "loginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email",
+            "example": "example@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "qwerty123"
+          }
+        }
+      },
+
+      "loginResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
           },
           "data": {
             "type": "object",
@@ -1639,6 +1709,7 @@
           }
         }
       },
+
       "refreshRequest": {
         "type": "object",
         "required": ["refreshToken"],
@@ -1649,6 +1720,7 @@
           }
         }
       },
+
       "refreshResponse": {
         "type": "object",
         "properties": {
@@ -1670,6 +1742,7 @@
           }
         }
       },
+
       "unauthorizedResponse": {
         "type": "object",
         "items": {
@@ -1684,6 +1757,7 @@
           "message": "Unauthorized"
         }
       },
+
       "verifyResponse": {
         "type": "object",
         "properties": {
@@ -1706,6 +1780,7 @@
           }
         }
       },
+
       "currentResponse": {
         "type": "object",
         "properties": {
@@ -1760,6 +1835,7 @@
           }
         }
       },
+
       "updateTaskRequest": {
         "type": "object",
         "properties": {
@@ -1797,6 +1873,7 @@
           }
         }
       },
+
       "createReviewRequest": {
         "type": "object",
         "required": ["rating", "required"],
@@ -1812,6 +1889,7 @@
           }
         }
       },
+
       "createReviewResponse": {
         "type": "object",
         "properties": {
@@ -1857,43 +1935,7 @@
           }
         }
       },
-      "loginRequest": {
-        "type": "object",
-        "required": ["email", "password"],
-        "properties": {
-          "email": {
-            "type": "string",
-            "description": "User's email",
-            "format": "email"
-          },
-          "password": {
-            "type": "string",
-            "description": "User's password",
-            "example": "qwerty123"
-          }
-        }
-      },
-      "loginResponse": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "example": "success"
-          },
-          "code": {
-            "type": "integer",
-            "example": 201
-          },
-          "accessToken": {
-            "type": "string",
-            "example": "eyJhbGciOiJIUzI1NiIs....."
-          },
-          "refreshToken": {
-            "type": "string",
-            "example": "eyJcsa15c1sa515csa54....."
-          }
-        }
-      },
+
       "changePassResponse": {
         "type": "object",
         "properties": {
