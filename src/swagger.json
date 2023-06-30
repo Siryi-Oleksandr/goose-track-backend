@@ -50,12 +50,12 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "Successful operation",
+          "201": {
+            "description": "Created",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/loginResponse"
+                  "$ref": "#/components/schemas/RegistrationResponse"
                 }
               }
             }
@@ -101,7 +101,7 @@
             }
           },
           "409": {
-            "description": "Not found",
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -649,6 +649,7 @@
         }
       }
     },
+
     "/tasks/{post{}}": {
       "post": {
         "tags": ["Tasks"],
@@ -1312,6 +1313,7 @@
         }
       }
     },
+
     "/own": {
       "get": {
         "tags": ["Reviews"],
@@ -1403,6 +1405,7 @@
         }
       }
     },
+
     "/own:{patch:{}}": {
       "patch": {
         "tags": ["Reviews"],
@@ -1494,9 +1497,10 @@
         "type": "object",
         "required": ["name", "email", "password"],
         "properties": {
-           "name": {
+          "name": {
             "type": "string",
-            "description": "User's name"
+            "description": "User's name",
+            "example": "Alex Doe"
           },
           "email": {
             "type": "string",
@@ -1509,6 +1513,7 @@
             "description": "User's password",
             "example": "qwerty123"
           }
+        }
       },
 
       "RegistrationResponse": {
@@ -1516,7 +1521,7 @@
         "properties": {
           "status": {
             "type": "string",
-            "example": "success"
+            "example": "created"
           },
           "code": {
             "type": "integer",
@@ -1525,13 +1530,43 @@
           "data": {
             "type": "object",
             "properties": {
-              "name": {
+              "accessToken": {
                 "type": "string",
-                "example": "Alexey"
+                "example": "1346464sdasd48464asd"
               },
-              "email": {
+              "refreshToken": {
                 "type": "string",
-                "example": "aqweqwe@gmail.com"
+                "example": "89652ddsdahh48984abn"
+              },
+              "user": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Alex Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "example@example.com"
+                  },
+                  "phone": {
+                    "type": "string",
+                    "example": ""
+                  },
+                  "skype": {
+                    "type": "string",
+                    "example": ""
+                  },
+                  "birthday": {
+                    "type": "string",
+                    "example": ""
+                  },
+                  "avatarURL": {
+                    "type": "string",
+                    "example": "//www.gravatar.com/avatar/f17f20f3bbc4bf95af0e9ee8d3211033?s=250"
+                  }
+                }
               }
             }
           }
@@ -2163,6 +2198,7 @@
           "message": "Forbidden"
         }
       },
+
       "conflictResponse": {
         "type": "object",
         "items": {
