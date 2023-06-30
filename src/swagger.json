@@ -651,61 +651,24 @@
       }
     },
 
-    "/tasks/{get{}}": {
+    "/tasks": {
       "get": {
         "tags": ["Tasks"],
         "summary": "Returns a list of all tasks by parameters.",
         "parameters": [
           {
             "in": "query",
-            "name": "title",
-            "required": true,
-            "example": 7,
-            "schema": {
-              "type": "String"
-            }
+            "name": "day",
+            "required": false,
+            "type": "string",
+            "description": "The date on which to return the tasks. Format: YYYY-MM-DD"
           },
           {
             "in": "query",
-            "name": "start",
-            "schema": {
-              "type": "String"
-            }
-          },
-          {
-            "in": "query",
-            "name": "end",
-            "schema": {
-              "type": "String"
-            }
-          },
-          {
-            "in": "query",
-            "name": "priority",
-            "schema": {
-              "type": "String"
-            }
-          },
-          {
-            "in": "query",
-            "name": "date",
-            "schema": {
-              "type": "String"
-            }
-          },
-          {
-            "in": "query",
-            "name": "category",
-            "schema": {
-              "type": "String"
-            }
-          },
-          {
-            "in": "query",
-            "name": "owner",
-            "schema": {
-              "type": "object"
-            }
+            "name": "month",
+            "required": false,
+            "type": "string",
+            "description": "Any date of the month for which tasks must be returned. Format: YYYY-MM-DD"
           }
         ],
         "security": [
@@ -725,7 +688,7 @@
             }
           },
           "400": {
-            "description": "Bad request (invalid request body)",
+            "description": "Bad request",
             "content": {
               "application/json": {
                 "schema": {
@@ -1829,29 +1792,6 @@
         }
       },
 
-      "logoutResponse": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "example": "OK"
-          },
-          "code": {
-            "type": "integer",
-            "example": 200
-          },
-          "data": {
-            "type": "object",
-            "properties": {
-              "message": {
-                "type": "string",
-                "example": "logout successfull"
-              }
-            }
-          }
-        }
-      },
-
       "changePassResponse": {
         "type": "object",
         "properties": {
@@ -1963,6 +1903,124 @@
         }
       },
 
+      "logoutResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "logout successfull"
+              }
+            }
+          }
+        }
+      },
+
+      "searchTaskResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string",
+              "example": "649db2cc5e53a2e9a8d8b124"
+            },
+            "title": {
+              "type": "string"
+            },
+            "start": {
+              "type": "string"
+            },
+            "end": {
+              "type": "string"
+            },
+            "date": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "priority": {
+              "type": "string",
+              "enum": ["low", "medium", "high"]
+            },
+            "category": {
+              "type": "string",
+              "enum": ["to-do", "in-progress", "done"]
+            },
+            "owner": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "year": {
+              "type": "integer",
+              "example": 2023
+            },
+            "month": {
+              "type": "integer",
+              "example": 7
+            },
+            "day": {
+              "type": "integer",
+              "example": 7
+            }
+          },
+          "example": [
+            {
+              "_id": "649db2cc5e53a2e9a8d8b124",
+              "title": "Task 1",
+              "start": "09:00",
+              "end": "09:30",
+              "date": "2023-06-28",
+              "priority": "medium",
+              "category": "done",
+              "owner": {
+                "type": "object",
+                "properties": {
+                  "_id": "6479dbb972171cebb39e9dc4",
+                  "name": "Alexander Doe",
+                  "email": "example@example.com",
+                  "avatarURL": "http://res.cloudinary.com/dsjxdktiz/image/upload/v1688133681/goose-track/iohp56kfliwlgfhyi0qg.jpg"
+                }
+              }
+            },
+            {
+              "_id": "649d92cbbec56980824ddee1",
+              "title": "Task 2",
+              "start": "19:00",
+              "end": "19:30",
+              "date": "2023-06-28",
+              "priority": "high",
+              "category": "to-do",
+              "owner": {
+                "type": "object",
+                "properties": {
+                  "_id": "6479dbb972171cebb39e9dc4",
+                  "name": "Alexander Doe",
+                  "email": "example@example.com",
+                  "avatarURL": "http://res.cloudinary.com/dsjxdktiz/image/upload/v1688133681/goose-track/iohp56kfliwlgfhyi0qg.jpg"
+                }
+              }
+            }
+          ]
+        }
+      },
+
       "createTaskRequest": {
         "type": "object",
         "required": [
@@ -2027,84 +2085,6 @@
         },
         "example": {
           "message": "Unauthorized"
-        }
-      },
-
-      "verifyResponse": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "example": "success"
-          },
-          "code": {
-            "type": "integer",
-            "example": 200
-          },
-          "data": {
-            "type": "object",
-            "properties": {
-              "message": {
-                "type": "string",
-                "example": "Verification email sent"
-              }
-            }
-          }
-        }
-      },
-
-      "currentResponse": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "example": "success"
-          },
-          "code": {
-            "type": "integer",
-            "example": 200
-          },
-          "data": {
-            "type": "object",
-            "properties": {
-              "name": {
-                "type": "string",
-                "example": "Goose"
-              },
-              "email": {
-                "type": "string",
-                "format": "email",
-                "example": "goose@track.com"
-              },
-              "avatarURL": {
-                "type": "string",
-                "example": "https://stig89.github.io/GooseTrack-frontend/static/media/GooseLogo@2x.3c0470b19aa18aaef0d8.png"
-              },
-              "birthday": {
-                "type": "string",
-                "format": "date-time",
-                "example": "2023-06-09T22:07:46.170Z"
-              },
-              "phone": {
-                "type": "string",
-                "example": "+123564689"
-              },
-              "skype": {
-                "type": "string",
-                "example": "@Goose"
-              },
-              "createdAt": {
-                "type": "string",
-                "format": "date-time",
-                "example": "2023-06-09T22:07:46.176Z"
-              },
-              "updatedAt": {
-                "type": "string",
-                "format": "date-time",
-                "example": "2023-06-09T22:17:38.953Z"
-              }
-            }
-          }
         }
       },
 
@@ -2398,77 +2378,6 @@
           "owner": "john@example.com",
           "createdAt": "2023-06-09T14:30:00Z",
           "updatedAt": "2023-06-09T15:45:00Z"
-        }
-      },
-
-      "searchTaskResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "_id": {
-              "type": "string"
-            },
-            "title": {
-              "type": "string"
-            },
-            "start": {
-              "type": "string"
-            },
-            "end": {
-              "type": "string"
-            },
-            "date": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "priority": {
-              "type": "string",
-              "enum": ["low", "medium", "high"]
-            },
-            "category": {
-              "type": "string",
-              "enum": ["to-do", "in-progress", "done"]
-            },
-            "owner": {
-              "type": "string"
-            },
-            "createdAt": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "updatedAt": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "year": {
-              "type": "integer",
-              "example": 2023
-            },
-            "month": {
-              "type": "integer",
-              "example": 7
-            },
-            "day": {
-              "type": "integer",
-              "example": 7
-            }
-          }
-        },
-        "example": {
-          "_id": "1",
-          "title": "Task 1",
-          "start": "09:00",
-          "end": "10:00",
-          "date": "2023-06-10T00:00:00Z",
-          "priority": "medium",
-          "category": "to-do",
-          "owner": "john@example.com",
-          "createdAt": "2023-06-09T14:30:00Z",
-          "updatedAt": "2023-06-09T15:45:00Z",
-          "year": 2023,
-          "month": 7,
-          "day": 7
         }
       },
 
