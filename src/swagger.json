@@ -95,7 +95,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
+                  "$ref": "#/components/schemas/notFoundResponse"
                 }
               }
             }
@@ -106,6 +106,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unprocessableResponse"
                 }
               }
             }
@@ -175,7 +185,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
+                  "$ref": "#/components/schemas/notFoundResponse"
                 }
               }
             }
@@ -189,6 +199,16 @@
                 }
               }
             }
+          },
+          "422": {
+            "description": "Unprocessable entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unprocessableResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -197,7 +217,7 @@
     "/refresh": {
       "post": {
         "tags": ["Auth"],
-        "summary": "Token refresh.",
+        "summary": "Token refresh",
         "parameters": [],
         "security": [
           {
@@ -261,7 +281,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
+                  "$ref": "#/components/schemas/notFoundResponse"
                 }
               }
             }
@@ -275,6 +295,16 @@
                 }
               }
             }
+          },
+          "422": {
+            "description": "Unprocessable entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unprocessableResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -283,7 +313,7 @@
     "/changePassword": {
       "patch": {
         "tags": ["Auth"],
-        "summary": "Changes the password.",
+        "summary": "Changes the password",
         "security": [
           {
             "Bearer": []
@@ -346,7 +376,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
+                  "$ref": "#/components/schemas/notFoundResponse"
                 }
               }
             }
@@ -357,6 +387,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unprocessableResponse"
                 }
               }
             }
@@ -456,6 +496,16 @@
                 }
               }
             }
+          },
+          "422": {
+            "description": "Unprocessable entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unprocessableResponse"
+                }
+              }
+            }
           }
         }
       }
@@ -464,7 +514,7 @@
     "/current": {
       "get": {
         "tags": ["Auth"],
-        "summary": "Retrieves an info about current user.",
+        "summary": "Retrieves an info about current user",
         "parameters": [],
         "security": [
           {
@@ -477,13 +527,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/currentResponse"
+                  "$ref": "#/components/schemas/loginResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad request (invalid request body)",
+            "description": "Bad request",
             "content": {
               "application/json": {
                 "schema": {
@@ -517,7 +567,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
+                  "$ref": "#/components/schemas/notFoundResponse"
                 }
               }
             }
@@ -539,7 +589,7 @@
     "/logout": {
       "post": {
         "tags": ["Auth"],
-        "summary": "Logout.",
+        "summary": "Successful operation",
         "parameters": [],
         "security": [
           {
@@ -547,11 +597,18 @@
           }
         ],
         "responses": {
-          "204": {
-            "description": "No Content"
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/logoutResponse"
+                }
+              }
+            }
           },
           "400": {
-            "description": "Bad request (invalid request body)",
+            "description": "Bad request",
             "content": {
               "application/json": {
                 "schema": {
@@ -585,17 +642,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/conflictResponse"
+                  "$ref": "#/components/schemas/notFoundResponse"
                 }
               }
             }
@@ -1782,6 +1829,29 @@
         }
       },
 
+      "logoutResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "logout successfull"
+              }
+            }
+          }
+        }
+      },
+
       "changePassResponse": {
         "type": "object",
         "properties": {
@@ -2429,6 +2499,21 @@
         },
         "example": {
           "message": "Forbidden"
+        }
+      },
+
+      "unprocessableResponse": {
+        "type": "object",
+        "items": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "example": {
+          "message": "Email is required"
         }
       },
 
