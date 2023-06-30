@@ -741,40 +741,37 @@
       }
     },
 
-    "/tasks/{post{}}": {
-      "post": {
+    "/tasks/statistics": {
+      "get": {
         "tags": ["Tasks"],
-        "summary": "Returns a list of all tasks by parameters.",
-        "parameters": [],
+        "summary": "Returns a object of the statistics all tasks by category per day and month.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "day",
+            "required": false,
+            "type": "string",
+            "description": "The date on which to return object of the statistics all tasks by category per day and month. Format: YYYY-MM-DD"
+          }
+        ],
         "security": [
           {
             "Bearer": []
           }
         ],
-        "requestBody": {
-          "description": "Registration's object",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/createTaskRequest"
-              }
-            }
-          }
-        },
         "responses": {
-          "201": {
+          "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/createTaskResponse"
+                  "$ref": "#/components/schemas/statisticsResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad request (invalid request body)",
+            "description": "Bad request",
             "content": {
               "application/json": {
                 "schema": {
@@ -808,17 +805,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/conflictResponse"
+                  "$ref": "#/components/schemas/"
                 }
               }
             }
@@ -828,95 +815,116 @@
     },
 
     "/tasks/:taskId": {
-      "patch": {
+      "get": {
         "tags": ["Tasks"],
-        "summary": "Updates an existing task.",
+        "summary": "Get task by ID",
         "parameters": [
           {
             "in": "path",
-            "name": "id",
+            "name": "taskId",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "type": "string",
+            "description": "Task id"
           }
         ],
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "requestBody": {
-          "description": "Registration's object",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/updateTaskRequest"
-              }
-            }
-          }
-        },
+        "security": [{ "Bearer": [] }],
         "responses": {
-          "201": {
+          "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/createTaskResponse"
+                  "$ref": "#/components/schemas/GetDeletePatchTaskResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad request (invalid request body)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/badRequestResponse"
-                }
-              }
-            }
+            "description": "Unable to find Task",
+            "content": {}
           },
           "401": {
-            "description": "Unauthorized user",
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      },
+      "put": {
+        "tags": ["Tasks"],
+        "summary": "Change tasks",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "Task id"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Tasks's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateTaskRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
+                  "$ref": "#/components/schemas/GetDeletePatchTaskResponse"
                 }
               }
             }
           },
-          "403": {
-            "description": "Forbidden request",
+          "400": {
+            "description": "Unable to find Task",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Tasks"],
+        "summary": "Delete task",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string",
+            "description": "Task id"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/forbiddenResponse"
+                  "$ref": "#/components/schemas/GetDeletePatchTaskResponse"
                 }
               }
             }
           },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
+          "400": {
+            "description": "Unable to find Task",
+            "content": {}
           },
-          "409": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/conflictResponse"
-                }
-              }
-            }
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
           }
         }
       }
@@ -1926,6 +1934,60 @@
         }
       },
 
+      "newTask": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "649db2cc5e53a2e9a8d8b124"
+          },
+          "title": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string"
+          },
+          "end": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "priority": {
+            "type": "string",
+            "enum": ["low", "medium", "high"]
+          },
+          "category": {
+            "type": "string",
+            "enum": ["to-do", "in-progress", "done"]
+          },
+          "owner": {
+            "type": "object",
+            "properties": {
+              "_id": { "type": "string" },
+              "name": { "type": "string" },
+              "email": { "type": "string" },
+              "avatarURL": { "type": "string" }
+            }
+          }
+        },
+        "example": {
+          "_id": "649db2cc5e53a2e9a8d8b124",
+          "title": "Task 1",
+          "start": "09:00",
+          "end": "09:30",
+          "date": "2023-06-28",
+          "priority": "medium",
+          "category": "done",
+          "owner": {
+            "_id": "6479dbb972171cebb39e9dc4",
+            "name": "Alexander Doe",
+            "email": "example@example.com",
+            "avatarURL": "http://res.cloudinary.com/dsjxdktiz/image/upload/v1688133681/goose-track/iohp56kfliwlgfhyi0qg.jpg"
+          }
+        }
+      },
+
       "searchTaskResponse": {
         "type": "array",
         "items": {
@@ -1945,8 +2007,7 @@
               "type": "string"
             },
             "date": {
-              "type": "string",
-              "format": "date-time"
+              "type": "string"
             },
             "priority": {
               "type": "string",
@@ -1957,27 +2018,13 @@
               "enum": ["to-do", "in-progress", "done"]
             },
             "owner": {
-              "type": "string"
-            },
-            "createdAt": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "updatedAt": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "year": {
-              "type": "integer",
-              "example": 2023
-            },
-            "month": {
-              "type": "integer",
-              "example": 7
-            },
-            "day": {
-              "type": "integer",
-              "example": 7
+              "type": "object",
+              "properties": {
+                "_id": { "type": "string" },
+                "name": { "type": "string" },
+                "email": { "type": "string" },
+                "avatarURL": { "type": "string" }
+              }
             }
           },
           "example": [
@@ -1990,13 +2037,10 @@
               "priority": "medium",
               "category": "done",
               "owner": {
-                "type": "object",
-                "properties": {
-                  "_id": "6479dbb972171cebb39e9dc4",
-                  "name": "Alexander Doe",
-                  "email": "example@example.com",
-                  "avatarURL": "http://res.cloudinary.com/dsjxdktiz/image/upload/v1688133681/goose-track/iohp56kfliwlgfhyi0qg.jpg"
-                }
+                "_id": "6479dbb972171cebb39e9dc4",
+                "name": "Alexander Doe",
+                "email": "example@example.com",
+                "avatarURL": "http://res.cloudinary.com/dsjxdktiz/image/upload/v1688133681/goose-track/iohp56kfliwlgfhyi0qg.jpg"
               }
             },
             {
@@ -2008,16 +2052,50 @@
               "priority": "high",
               "category": "to-do",
               "owner": {
-                "type": "object",
-                "properties": {
-                  "_id": "6479dbb972171cebb39e9dc4",
-                  "name": "Alexander Doe",
-                  "email": "example@example.com",
-                  "avatarURL": "http://res.cloudinary.com/dsjxdktiz/image/upload/v1688133681/goose-track/iohp56kfliwlgfhyi0qg.jpg"
-                }
+                "_id": "6479dbb972171cebb39e9dc4",
+                "name": "Alexander Doe",
+                "email": "example@example.com",
+                "avatarURL": "http://res.cloudinary.com/dsjxdktiz/image/upload/v1688133681/goose-track/iohp56kfliwlgfhyi0qg.jpg"
               }
             }
           ]
+        }
+      },
+
+      "statisticsResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "statisticsByDay": {
+                "type": "object",
+                "example": {
+                  "todo": 50,
+                  "inProgress": 25,
+                  "done": 25,
+                  "allTasks": 4
+                }
+              },
+              "statisticsByMonth": {
+                "type": "object",
+                "example": {
+                  "todo": 20,
+                  "inProgress": 10,
+                  "done": 70,
+                  "allTasks": 28
+                }
+              }
+            }
+          }
         }
       },
 
