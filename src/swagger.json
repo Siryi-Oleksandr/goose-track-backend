@@ -194,6 +194,92 @@
       }
     },
 
+    "/refresh": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Token refresh.",
+        "parameters": [],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "requestBody": {
+          "description": "Token refresh object.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/refreshRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/refreshResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
     "/changePassword": {
       "patch": {
         "tags": ["Auth"],
@@ -266,7 +352,7 @@
             }
           },
           "409": {
-            "description": "Not found",
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -1527,11 +1613,11 @@
             "properties": {
               "accessToken": {
                 "type": "string",
-                "example": "1346464sdasd48464asd"
+                "example": "1346464sdasd48464asd..."
               },
               "refreshToken": {
                 "type": "string",
-                "example": "89652ddsdahh48984abn"
+                "example": "89652ddsdahh48984abn..."
               },
               "user": {
                 "type": "object",
@@ -1602,11 +1688,11 @@
             "properties": {
               "accessToken": {
                 "type": "string",
-                "example": "1346464sdasd48464asd"
+                "example": "1346464sdasd48464asd..."
               },
               "refreshToken": {
                 "type": "string",
-                "example": "89652ddsdahh48984abn"
+                "example": "89652ddsdahh48984abn..."
               },
               "user": {
                 "type": "object",
@@ -1637,6 +1723,82 @@
                     "example": "//www.gravatar.com/avatar/f17f20f3bbc4bf95af0e9ee8d3211033?s=250"
                   }
                 }
+              }
+            }
+          }
+        }
+      },
+
+      "refreshRequest": {
+        "type": "object",
+        "required": ["refreshToken"],
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "example": "89652ddsdahh48984abn..."
+          }
+        }
+      },
+
+      "refreshResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "accessToken": {
+                "type": "string",
+                "example": "1346464sdasd48464asd..."
+              },
+              "refreshToken": {
+                "type": "string",
+                "example": "89652ddsdahh48984abn..."
+              }
+            }
+          }
+        }
+      },
+
+      "changePassRequest": {
+        "type": "object",
+        "required": ["password", "newPassword"],
+        "properties": {
+          "password": {
+            "type": "string",
+            "example": "qwerty123"
+          },
+          "newPassword": {
+            "type": "string",
+            "example": "123qwerty"
+          }
+        }
+      },
+
+      "changePassResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "password changed successfully"
               }
             }
           }
@@ -1691,54 +1853,6 @@
             "type": "string",
             "description": "The owner of a task.",
             "example": "John Doe"
-          }
-        }
-      },
-
-      "changePassRequest": {
-        "type": "object",
-        "required": ["old_password", "new_password"],
-        "properties": {
-          "old_password": {
-            "type": "string",
-            "example": "qwerty123"
-          },
-          "new_password": {
-            "type": "string",
-            "example": "123qwerty"
-          }
-        }
-      },
-
-      "refreshRequest": {
-        "type": "object",
-        "required": ["refreshToken"],
-        "properties": {
-          "refreshToken": {
-            "type": "string",
-            "example": "eyJcsa15c1sa515csa54....."
-          }
-        }
-      },
-
-      "refreshResponse": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "example": "success"
-          },
-          "code": {
-            "type": "integer",
-            "example": 200
-          },
-          "accessToken": {
-            "type": "string",
-            "example": "eyJhbGciOiJIUzI1NiIs....."
-          },
-          "refreshToken": {
-            "type": "string",
-            "example": "eyJcsa15c1sa515csa54....."
           }
         }
       },
@@ -1936,23 +2050,6 @@
         }
       },
 
-      "changePassResponse": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "example": "success"
-          },
-          "code": {
-            "type": "integer",
-            "example": 200
-          },
-          "data": {
-            "type": "string",
-            "example": true
-          }
-        }
-      },
       "badRequestResponse": {
         "type": "object",
         "items": {
