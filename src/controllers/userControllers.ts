@@ -146,10 +146,19 @@ const logout = controllerWrapper(async (req: any, res: Response) => {
 
 //* GET /current
 const getCurrentUser = controllerWrapper(async (req: any, res: Response) => {
-  const { email, name, phone, skype, birthday, avatarURL, accessToken } =
-    req.user;
+  const {
+    email,
+    name,
+    phone,
+    skype,
+    birthday,
+    avatarURL,
+    accessToken,
+    refreshToken,
+  } = req.user;
   res.json({
     accessToken,
+    refreshToken,
     user: { email, name, phone, skype, birthday, avatarURL },
   });
 });
@@ -193,7 +202,7 @@ const update = controllerWrapper(async (req: any, res: Response) => {
     {
       new: true,
       select:
-        "-password -refreshToken -createdAt -updatedAt -avatarID -accessToken",
+        "-password -accessToken -refreshToken -avatarID -createdAt -updatedAt ",
     }
   );
 

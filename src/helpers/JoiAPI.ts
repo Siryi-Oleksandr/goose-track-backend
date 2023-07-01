@@ -5,7 +5,7 @@ class JoiAPI {
   private priorityType = ["low", "medium", "high"];
 
   private emailRegexp: RegExp =
-    /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
+    /^([A-z0-9_-]+\.)*[A-z0-9_-]+@[A-z0-9_-]+(\.[A-z0-9_-]+)*\.[A-z]{2,6}$/;
   private dateRegexp: RegExp =
     /[1-9][0-9][0-9]{2}-([0][1-9]|[1][0-2])-([1-2][0-9]|[0][1-9]|[3][0-1])/;
   private timeRegexp: RegExp = /^([01]\d|2[0-3]):[0-5]\d$/;
@@ -137,7 +137,7 @@ class JoiAPI {
       .pattern(new RegExp(this.birthdayRegexp))
       .messages({
         "string.pattern.base":
-          "The birthday format is incorrect. Please enter in the format 25/08/2002",
+          "The birthday format is incorrect. Please enter in the format 24/08/1991",
       }),
   });
 

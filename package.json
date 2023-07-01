@@ -39,7 +39,6 @@
     "passport-google-oauth2": "^0.2.0",
     "reflect-metadata": "^0.1.13",
     "routing-controllers": "^0.10.4",
-    "swagger-ui": "^5.1.0",
     "swagger-ui-express": "^4.6.3"
   },
   "devDependencies": {

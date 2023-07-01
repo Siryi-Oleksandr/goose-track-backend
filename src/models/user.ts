@@ -2,7 +2,7 @@ import { Schema, Document, model } from "mongoose";
 import { handleMongooseError } from "../helpers";
 
 const emailRegexp: RegExp =
-  /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
+  /^([A-z0-9_-]+\.)*[A-z0-9_-]+@[A-z0-9_-]+(\.[A-z0-9_-]+)*\.[A-z]{2,6}$/;
 
 interface IUser extends Document {
   name: string;
