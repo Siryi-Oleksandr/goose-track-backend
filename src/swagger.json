@@ -1214,7 +1214,7 @@
       }
     },
 
-    "/": {
+    "/reviews": {
       "get": {
         "tags": ["Reviews"],
         "summary": "Return a list of all reviews",
@@ -1291,7 +1291,7 @@
       }
     },
 
-    "/own": {
+    "/reviews/own": {
       "get": {
         "tags": ["Reviews"],
         "summary": "Return a review of the current user",
@@ -2493,7 +2493,7 @@
           }
         },
         "example": {
-          "message": "Email is required"
+          "message": "Some request field is required"
         }
       },
 
