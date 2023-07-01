@@ -9,9 +9,9 @@
   "produces": ["application/json"],
 
   "servers": [
-    { "url": "http://localhost:3001" },
+    { "url": "https://goose-track-verq.onrender.com" },
     {
-      "url": "https://goose-track-verq.onrender.com/"
+      "url": "http://localhost:3001"
     }
   ],
 
@@ -66,26 +66,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/badRequestResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/forbiddenResponse"
                 }
               }
             }
@@ -166,16 +146,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/forbiddenResponse"
                 }
               }
             }
@@ -313,7 +283,7 @@
     "/changePassword": {
       "patch": {
         "tags": ["Auth"],
-        "summary": "Changes the password",
+        "summary": "Change the password",
         "security": [
           {
             "Bearer": []
@@ -514,7 +484,7 @@
     "/current": {
       "get": {
         "tags": ["Auth"],
-        "summary": "Retrieves an info about current user",
+        "summary": "Retrieve an info about current user",
         "parameters": [],
         "security": [
           {
@@ -589,7 +559,7 @@
     "/logout": {
       "post": {
         "tags": ["Auth"],
-        "summary": "Successful operation",
+        "summary": "User logout",
         "parameters": [],
         "security": [
           {
@@ -682,7 +652,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/searchTaskResponse"
+                  "$ref": "#/components/schemas/getTasksResponse"
                 }
               }
             }
@@ -722,17 +692,96 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "$ref": "#/components/schemas/notFoundResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Tasks"],
+        "summary": "Create task",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Tasks's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createUpdateTaskRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/createTaskResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
                   "$ref": "#/components/schemas/unauthorizedResponse"
                 }
               }
             }
           },
-          "409": {
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
             "description": "Not found",
             "content": {
               "application/json": {
                 "schema": {
+                  "$ref": "#/components/schemas/notFoundResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
                   "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unprocessableResponse"
                 }
               }
             }
@@ -744,7 +793,7 @@
     "/tasks/statistics": {
       "get": {
         "tags": ["Tasks"],
-        "summary": "Returns a object of the statistics all tasks by category per day and month.",
+        "summary": "Return a object of the statistics all tasks by category per day and month",
         "parameters": [
           {
             "in": "query",
@@ -805,7 +854,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/"
+                  "$ref": "#/components/schemas/notFoundResponse"
                 }
               }
             }
@@ -814,7 +863,7 @@
       }
     },
 
-    "/tasks/:taskId": {
+    "/tasks/{taskId}": {
       "get": {
         "tags": ["Tasks"],
         "summary": "Get task by ID",
@@ -834,28 +883,80 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetDeletePatchTaskResponse"
+                  "$ref": "#/components/schemas/getTaskByIdResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Unable to find Task",
-            "content": {}
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
           },
           "401": {
-            "description": "Unauthorized",
-            "content": {}
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/notFoundResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unprocessableResponse"
+                }
+              }
+            }
           }
         }
       },
-      "put": {
+      "patch": {
         "tags": ["Tasks"],
         "summary": "Change tasks",
         "parameters": [
           {
             "in": "path",
-            "name": "id",
+            "name": "taskId",
             "required": true,
             "type": "string",
             "description": "Task id"
@@ -868,7 +969,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateTaskRequest"
+                "$ref": "#/components/schemas/createUpdateTaskRequest"
               }
             }
           }
@@ -879,18 +980,70 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetDeletePatchTaskResponse"
+                  "$ref": "#/components/schemas/updateTaskResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Unable to find Task",
-            "content": {}
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
           },
           "401": {
-            "description": "Unauthorized",
-            "content": {}
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/notFoundResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unprocessableResponse"
+                }
+              }
+            }
           }
         }
       },
@@ -900,7 +1053,7 @@
         "parameters": [
           {
             "in": "path",
-            "name": "id",
+            "name": "taskId",
             "required": true,
             "type": "string",
             "description": "Task id"
@@ -913,35 +1066,66 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetDeletePatchTaskResponse"
+                  "$ref": "#/components/schemas/deleteTaskResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Unable to find Task",
-            "content": {}
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
           },
           "401": {
-            "description": "Unauthorized",
-            "content": {}
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/notFoundResponse"
+                }
+              }
+            }
           }
         }
       }
     },
 
-    "/tasks/category/:taskId": {
+    "/tasks/category/{taskId}": {
       "patch": {
         "tags": ["Tasks"],
-        "summary": "Updates an existing task.",
+        "summary": "Update a current task",
         "parameters": [
           {
             "in": "path",
-            "name": "id",
+            "name": "taskId",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
+            "type": "string",
+            "description": "Task id"
           }
         ],
         "security": [
@@ -955,114 +1139,24 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/updateTaskRequest"
+                "$ref": "#/components/schemas/updateTaskCategoryRequest"
               }
             }
           }
         },
         "responses": {
-          "201": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/createTaskResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request (invalid request body)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/badRequestResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/forbiddenResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/conflictResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-
-    "/tasks/:taskId:{patch{}}": {
-      "patch": {
-        "tags": ["Tasks"],
-        "summary": "Updates an existing task.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "responses": {
           "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Deleted successfully!"
-                    }
-                  }
+                  "$ref": "#/components/schemas/updateTaskResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad request (invalid request body)",
+            "description": "Bad request",
             "content": {
               "application/json": {
                 "schema": {
@@ -1096,13 +1190,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
+                  "$ref": "#/components/schemas/"
                 }
               }
             }
           },
           "409": {
-            "description": "Not found",
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -1110,93 +1204,13 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-
-    "/tasks/:taskId:{delete{}}": {
-      "delete": {
-        "tags": ["Tasks"],
-        "summary": "Updates an existing task.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "Deleted successfully!"
-                    }
-                  }
-                }
-              }
-            }
           },
-          "400": {
-            "description": "Bad request (invalid request body)",
+          "422": {
+            "description": "Unprocessable entity",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/badRequestResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/forbiddenResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/conflictResponse"
+                  "$ref": "#/components/schemas/unprocessableResponse"
                 }
               }
             }
@@ -1934,12 +1948,11 @@
         }
       },
 
-      "newTask": {
+      "getTask": {
         "type": "object",
         "properties": {
           "_id": {
-            "type": "string",
-            "example": "649db2cc5e53a2e9a8d8b124"
+            "type": "string"
           },
           "title": {
             "type": "string"
@@ -1988,14 +2001,13 @@
         }
       },
 
-      "searchTaskResponse": {
-        "type": "array",
-        "items": {
+      "newTask": {
+        "type": "object",
+        "properties": {
           "type": "object",
           "properties": {
             "_id": {
-              "type": "string",
-              "example": "649db2cc5e53a2e9a8d8b124"
+              "type": "string"
             },
             "title": {
               "type": "string"
@@ -2007,7 +2019,8 @@
               "type": "string"
             },
             "date": {
-              "type": "string"
+              "type": "string",
+              "format": "date-time"
             },
             "priority": {
               "type": "string",
@@ -2018,47 +2031,36 @@
               "enum": ["to-do", "in-progress", "done"]
             },
             "owner": {
-              "type": "object",
-              "properties": {
-                "_id": { "type": "string" },
-                "name": { "type": "string" },
-                "email": { "type": "string" },
-                "avatarURL": { "type": "string" }
-              }
-            }
-          },
-          "example": [
-            {
-              "_id": "649db2cc5e53a2e9a8d8b124",
-              "title": "Task 1",
-              "start": "09:00",
-              "end": "09:30",
-              "date": "2023-06-28",
-              "priority": "medium",
-              "category": "done",
-              "owner": {
-                "_id": "6479dbb972171cebb39e9dc4",
-                "name": "Alexander Doe",
-                "email": "example@example.com",
-                "avatarURL": "http://res.cloudinary.com/dsjxdktiz/image/upload/v1688133681/goose-track/iohp56kfliwlgfhyi0qg.jpg"
-              }
+              "type": "string"
             },
-            {
-              "_id": "649d92cbbec56980824ddee1",
-              "title": "Task 2",
-              "start": "19:00",
-              "end": "19:30",
-              "date": "2023-06-28",
-              "priority": "high",
-              "category": "to-do",
-              "owner": {
-                "_id": "6479dbb972171cebb39e9dc4",
-                "name": "Alexander Doe",
-                "email": "example@example.com",
-                "avatarURL": "http://res.cloudinary.com/dsjxdktiz/image/upload/v1688133681/goose-track/iohp56kfliwlgfhyi0qg.jpg"
-              }
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
             }
-          ]
+          }
+        },
+        "example": {
+          "_id": "649fbb4b7e369b1ecf390ed9",
+          "title": "Task 1",
+          "start": "09:00",
+          "end": "10:00",
+          "date": "2023-06-10",
+          "priority": "medium",
+          "category": "to-do",
+          "owner": "649d8e89e2d6e80541252217",
+          "createdAt": "2023-06-09T14:30:00Z",
+          "updatedAt": "2023-06-09T15:45:00Z"
+        }
+      },
+
+      "getTasksResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/getTask"
         }
       },
 
@@ -2099,37 +2101,46 @@
         }
       },
 
-      "createTaskRequest": {
+      "getTaskByIdResponse": {
         "type": "object",
-        "required": [
-          "title",
-          "start",
-          "end",
-          "date",
-          "priority",
-          "category",
-          "owner"
-        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "$ref": "#/components/schemas/getTask"
+          }
+        }
+      },
+
+      "createUpdateTaskRequest": {
+        "type": "object",
+        "required": ["title", "start", "end", "date", "priority", "category"],
         "properties": {
           "title": {
             "type": "string",
-            "description": "Title of a task.",
+            "description": "Title of a task",
             "example": "New Task"
           },
           "start": {
             "type": "string",
-            "description": "Start time. In `HH:mm` format.",
+            "description": "Start time. In `HH:MM` format",
             "example": "09:00"
           },
           "end": {
             "type": "string",
-            "description": "End time. In `HH:mm` format. Must be greater than `start`.",
+            "description": "End time. In `HH:MM` format. Must be greater than `start`",
             "example": "17:00"
           },
           "date": {
             "type": "string",
-            "description": "Day on which to schedule a task. In [ISO 8601 date format](https://en.wikipedia.org/wiki/ISO_8601).",
-            "example": "2023-07-15"
+            "description": "Day on which to schedule a task. In format YYYY-MM-DD",
+            "example": "2023-06-30"
           },
           "priority": {
             "type": "string",
@@ -2142,64 +2153,76 @@
             "enum": ["to-do", "in-progress", "done"],
             "description": "The category of a task. Possible values: `\"to-do\", \"in-progress\", \"done\"`",
             "example": "to-do"
-          },
-          "owner": {
-            "type": "string",
-            "description": "The owner of a task.",
-            "example": "John Doe"
           }
         }
       },
 
-      "unauthorizedResponse": {
+      "createTaskResponse": {
         "type": "object",
-        "items": {
-          "type": "object",
-          "properties": {
-            "message": {
-              "type": "string"
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "Created"
+          },
+          "code": {
+            "type": "integer",
+            "example": 201
+          },
+          "data": {
+            "$ref": "#/components/schemas/newTask"
+          }
+        }
+      },
+
+      "updateTaskCategoryRequest": {
+        "type": "object",
+        "required": ["category"],
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": ["to-do", "in-progress", "done"],
+            "description": "The category of a task. Possible values: `\"to-do\", \"in-progress\", \"done\"`",
+            "example": "done"
+          }
+        }
+      },
+
+      "updateTaskResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "$ref": "#/components/schemas/newTask"
+          }
+        }
+      },
+
+      "deleteTaskResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "OK"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "Task deleted"
+              }
             }
-          }
-        },
-        "example": {
-          "message": "Unauthorized"
-        }
-      },
-
-      "updateTaskRequest": {
-        "type": "object",
-        "properties": {
-          "title": {
-            "type": "string",
-            "description": "Title of a task.",
-            "example": "New Task"
-          },
-          "start": {
-            "type": "string",
-            "description": "Start time. In `HH:mm` format.",
-            "example": "09:00"
-          },
-          "end": {
-            "type": "string",
-            "description": "End time. In `HH:mm` format. Must be greater than `start`.",
-            "example": "17:00"
-          },
-          "date": {
-            "type": "string",
-            "description": "Day on which to schedule a task. In [ISO 8601 date format](https://en.wikipedia.org/wiki/ISO_8601).",
-            "example": "2023-07-15"
-          },
-          "priority": {
-            "type": "string",
-            "description": "Priority of a task. Possible values: `\"low\", \"medium\", \"high\"`",
-            "enum": ["low", "medium", "high"],
-            "example": "medium"
-          },
-          "category": {
-            "type": "string",
-            "enum": ["to-do", "in-progress", "done"],
-            "description": "The category of a task. Possible values: `\"to-do\", \"in-progress\", \"done\"`",
-            "example": "to-do"
           }
         }
       },
@@ -2263,21 +2286,6 @@
               }
             }
           }
-        }
-      },
-
-      "badRequestResponse": {
-        "type": "object",
-        "items": {
-          "type": "object",
-          "properties": {
-            "message": {
-              "type": "string"
-            }
-          }
-        },
-        "example": {
-          "message": "Bad Request."
         }
       },
 
@@ -2403,59 +2411,33 @@
         }
       },
 
-      "createTaskResponse": {
+      "badRequestResponse": {
         "type": "object",
         "items": {
           "type": "object",
           "properties": {
-            "_id": {
+            "message": {
               "type": "string"
-            },
-            "title": {
-              "type": "string"
-            },
-            "start": {
-              "type": "string"
-            },
-            "end": {
-              "type": "string"
-            },
-            "date": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "priority": {
-              "type": "string",
-              "enum": ["low", "medium", "high"]
-            },
-            "category": {
-              "type": "string",
-              "enum": ["to-do", "in-progress", "done"]
-            },
-            "owner": {
-              "type": "string"
-            },
-            "createdAt": {
-              "type": "string",
-              "format": "date-time"
-            },
-            "updatedAt": {
-              "type": "string",
-              "format": "date-time"
             }
           }
         },
         "example": {
-          "_id": "1",
-          "title": "Task 1",
-          "start": "09:00",
-          "end": "10:00",
-          "date": "2023-06-10T00:00:00Z",
-          "priority": "medium",
-          "category": "to-do",
-          "owner": "john@example.com",
-          "createdAt": "2023-06-09T14:30:00Z",
-          "updatedAt": "2023-06-09T15:45:00Z"
+          "message": "Bad Request"
+        }
+      },
+
+      "unauthorizedResponse": {
+        "type": "object",
+        "items": {
+          "type": "object",
+          "properties": {
+            "message": {
+              "type": "string"
+            }
+          }
+        },
+        "example": {
+          "message": "Unauthorized"
         }
       },
 
@@ -2519,6 +2501,7 @@
         }
       }
     },
+
     "securitySchemes": {
       "Bearer": {
         "type": "http",
