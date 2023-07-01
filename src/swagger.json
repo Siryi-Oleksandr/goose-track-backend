@@ -628,19 +628,20 @@
         "parameters": [
           {
             "in": "query",
-            "name": "page",
+            "name": "day",
             "required": false,
-            "type": "integer",
-            "description": "Number of the page"
+            "type": "string",
+            "description": "The date on which to return the tasks. Format: YYYY-MM-DD"
           },
           {
             "in": "query",
-            "name": "limit",
+            "name": "month",
             "required": false,
-            "type": "integer",
-            "description": "Number of the reviews in response"
+            "type": "string",
+            "description": "Any date of the month for which tasks must be returned. Format: YYYY-MM-DD"
           }
         ],
+        "security": [{ "Bearer": [] }],
         "responses": {
           "200": {
             "description": "Successful operation",
