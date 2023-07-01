@@ -628,22 +628,17 @@
         "parameters": [
           {
             "in": "query",
-            "name": "day",
+            "name": "page",
             "required": false,
-            "type": "string",
-            "description": "The date on which to return the tasks. Format: YYYY-MM-DD"
+            "type": "integer",
+            "description": "Number of the page"
           },
           {
             "in": "query",
-            "name": "month",
+            "name": "limit",
             "required": false,
-            "type": "string",
-            "description": "Any date of the month for which tasks must be returned. Format: YYYY-MM-DD"
-          }
-        ],
-        "security": [
-          {
-            "Bearer": []
+            "type": "integer",
+            "description": "Number of the reviews in response"
           }
         ],
         "responses": {
@@ -1190,7 +1185,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/"
+                  "$ref": "#/components/schemas/notFoundResponse"
                 }
               }
             }
@@ -1222,7 +1217,7 @@
     "/": {
       "get": {
         "tags": ["Reviews"],
-        "summary": "Returns a list of all reviews.",
+        "summary": "Return a list of all reviews",
         "parameters": [
           {
             "in": "query",
@@ -1241,24 +1236,19 @@
             }
           }
         ],
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
         "responses": {
           "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/getReviewResponse"
+                  "$ref": "#/components/schemas/getReviewsResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad request (invalid request body)",
+            "description": "Bad request",
             "content": {
               "application/json": {
                 "schema": {
@@ -1292,72 +1282,94 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "$ref": "#/components/schemas/notFoundResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/own": {
+      "get": {
+        "tags": ["Reviews"],
+        "summary": "Return a review of the current user",
+        "parameters": [],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getOwnReviewResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
                   "$ref": "#/components/schemas/unauthorizedResponse"
                 }
               }
             }
           },
-          "409": {
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
             "description": "Not found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/conflictResponse"
+                  "$ref": "#/components/schemas/notFoundResponse"
                 }
               }
             }
           }
         }
       },
-      "/reviews/own": {
+      "post": {
         "tags": ["Reviews"],
-        "summary": "Create a Review.",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "rating",
-            "example": 10,
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "in": "query",
-            "name": "text",
-            "example": "Make a bill",
-            "schema": {
-              "type": "String"
-            }
-          },
-          {
-            "in": "query",
-            "name": "date",
-            "example": "27.06.2023",
-            "schema": {
-              "type": "String"
-            }
-          },
-          {
-            "in": "query",
-            "name": "owner",
-            "example": "Bill Gates",
-            "schema": {
-              "type": "String"
-            }
-          }
-        ],
+        "summary": "Create a new user review",
+        "parameters": [],
         "security": [
           {
             "Bearer": []
           }
         ],
         "requestBody": {
-          "description": "Registration's object",
+          "description": "Tasks's object",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/createReviewRequest"
+                "$ref": "#/components/schemas/createUpdateReviewRequest"
               }
             }
           }
@@ -1374,7 +1386,7 @@
             }
           },
           "400": {
-            "description": "Bad request (invalid request body)",
+            "description": "Bad request",
             "content": {
               "application/json": {
                 "schema": {
@@ -1408,13 +1420,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
+                  "$ref": "#/components/schemas/notFoundResponse"
                 }
               }
             }
           },
           "409": {
-            "description": "Not found",
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -1422,135 +1434,52 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-
-    "/own": {
-      "get": {
-        "tags": ["Reviews"],
-        "summary": "Returns a list of all current user reviews.",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "limit",
-            "example": 10,
-            "schema": {
-              "type": "number"
-            }
           },
-          {
-            "in": "query",
-            "name": "page",
-            "example": 1,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
+          "422": {
+            "description": "Unprocessable entity",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/getReviewResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request (invalid request body)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/badRequestResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized user",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/forbiddenResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/conflictResponse"
+                  "$ref": "#/components/schemas/unprocessableResponse"
                 }
               }
             }
           }
         }
-      }
-    },
-
-    "/own:{patch:{}}": {
+      },
       "patch": {
         "tags": ["Reviews"],
-        "summary": "Returns a review by specific ID.",
-        "parameters": [
-          {
-            "in": "path",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "summary": "Update a review of the current user",
+        "parameters": [],
         "security": [
           {
             "Bearer": []
           }
         ],
+        "requestBody": {
+          "description": "Tasks's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createUpdateReviewRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/getOneReviewResponse"
+                  "$ref": "#/components/schemas/updateReviewResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad request (invalid request body)",
+            "description": "Bad request",
             "content": {
               "application/json": {
                 "schema": {
@@ -1584,17 +1513,89 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/unauthorizedResponse"
+                  "$ref": "#/components/schemas/notFoundResponse"
                 }
               }
             }
           },
           "409": {
-            "description": "Not found",
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/conflictResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unprocessableResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Reviews"],
+        "summary": "Delete a review of the current user",
+        "parameters": [],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/deleteOwnReviewResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/badRequestResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/unauthorizedResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/forbiddenResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/notFoundResponse"
                 }
               }
             }
@@ -1839,6 +1840,7 @@
 
       "updateUserRequest": {
         "type": "object",
+        "required": ["name", "email"],
         "properties": {
           "name": {
             "type": "string",
@@ -1862,7 +1864,6 @@
             "description": "User's birthday"
           }
         },
-        "required": ["name", "email"],
         "example": {
           "name": "Alexander Doe",
           "email": "example@example.com",
@@ -2227,18 +2228,119 @@
         }
       },
 
-      "createReviewRequest": {
+      "getReview": {
         "type": "object",
-        "required": ["rating", "required"],
+        "properties": {
+          "_id": {
+            "type": "string"
+          },
+          "rating": {
+            "type": "integer"
+          },
+          "text": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "owner": {
+            "type": "object",
+            "properties": {
+              "_id": { "type": "string" },
+              "name": { "type": "string" },
+              "avatarURL": { "type": "string" }
+            }
+          }
+        },
+        "example": {
+          "_id": "649f39a15527bf7d0c266483",
+          "rating": 4,
+          "text": "It is awesome app",
+          "date": "Fri Jun 30 2023 20:22:57 GMT+0000",
+          "owner": {
+            "_id": "6479dbb972171cebb39e9dc4",
+            "name": "Alexander Doe",
+            "avatarURL": "http://res.cloudinary.com/dsjxdktiz/image/upload/v1688133681/goose-track/iohp56kfliwlgfhyi0qg.jpg"
+          }
+        }
+      },
+
+      "newReview": {
+        "type": "object",
+        "properties": {
+          "type": "object",
+          "properties": {
+            "_id": {
+              "type": "string"
+            },
+            "text": {
+              "type": "string"
+            },
+            "rating": {
+              "type": "integer"
+            },
+            "date": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "owner": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "updatedAt": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "example": {
+          "_id": "64a0013eb7225e12936b2471",
+          "text": "This app is awesome",
+          "rating": 5,
+          "date": "Sat Jul 01 2023 13:34:38 GMT+0300",
+          "owner": "649d8e89e2d6e80541252217",
+          "createdAt": "2023-07-01T10:34:38.470Z",
+          "updatedAt": "2023-07-01T10:34:38.470Z"
+        }
+      },
+
+      "getReviewsResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Status of request",
+            "example": "OK"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/getReview"
+            }
+          }
+        }
+      },
+
+      "createUpdateReviewRequest": {
+        "type": "object",
+        "required": ["rating", "text"],
         "properties": {
           "rating": {
             "type": "number",
-            "description": "Rating."
+            "description": "Rating",
+            "example": 4
           },
-          "comment": {
+          "text": {
             "type": "string",
-            "description": "Comment",
-            "example": "GooseTrack the best!"
+            "description": "text",
+            "example": "This app is awesome"
           }
         }
       },
@@ -2249,164 +2351,73 @@
           "status": {
             "type": "string",
             "description": "Status of request",
-            "example": "success"
+            "example": "Created"
           },
           "code": {
             "type": "integer",
             "example": 201
           },
           "data": {
-            "type": "object",
-            "properties": {
-              "rating": {
-                "type": "integer"
-              },
-              "comment": {
-                "type": "string",
-                "description": "Comment",
-                "example": "GooseTrack the best!"
-              },
-              "owner": {
-                "type": "string",
-                "example": "1346464sdasd48464asd"
-              },
-              "_id": {
-                "type": "string",
-                "example": "aasdfdfd77979797sd9f797sdf"
-              },
-              "createdAt": {
-                "type": "string",
-                "format": "date-time",
-                "example": "2023-06-09T22:43:06.511Z"
-              },
-              "updatedAt": {
-                "type": "string",
-                "format": "date-time",
-                "example": "2023-06-09T22:43:06.511Z"
-              }
-            }
+            "$ref": "#/components/schemas/newReview"
           }
         }
       },
 
-      "getReviewResponse": {
+      "updateReviewResponse": {
         "type": "object",
         "properties": {
           "status": {
             "type": "string",
             "description": "Status of request",
-            "example": "success"
+            "example": "OK"
           },
           "code": {
             "type": "integer",
-            "example": 201
+            "example": 200
           },
           "data": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "properties": {
-                "rating": {
-                  "type": "integer"
-                },
-                "_id": {
-                  "type": "string",
-                  "example": "aasdfdfd77979797sd9f797sdf",
-                  "description": "Review ID"
-                },
-                "comment": {
-                  "type": "string",
-                  "description": "Comment",
-                  "example": "GooseTrack the best!"
-                },
-                "owner": {
-                  "type": "object",
-                  "properties": {
-                    "_id": {
-                      "type": "string",
-                      "example": "aasdfdfd77979797sd9f797sdf",
-                      "description": "User ID"
-                    },
-                    "name": {
-                      "type": "string",
-                      "example": "Goose",
-                      "description": "User Name"
-                    },
-                    "avatarURL": {
-                      "type": "string",
-                      "example": "https://stig89.github.io/GooseTrack-frontend/static/media/GooseLogo@2x.3c0470b19aa18aaef0d8.png"
-                    }
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/schemas/newReview"
           }
         }
       },
 
-      "getOneReviewResponse": {
+      "getOwnReviewResponse": {
         "type": "object",
         "properties": {
           "status": {
             "type": "string",
             "description": "Status of request",
-            "example": "success"
+            "example": "OK"
           },
           "code": {
             "type": "integer",
-            "example": 201
+            "example": 200
           },
           "data": {
-            "type": "object",
-            "properties": {
-              "rating": {
-                "type": "integer"
-              },
-              "_id": {
-                "type": "string",
-                "example": "aasdfdfd77979797sd9f797sdf",
-                "description": "Review ID"
-              },
-              "comment": {
-                "type": "string",
-                "description": "Comment",
-                "example": "GooseTrack the best!"
-              },
-              "owner": {
-                "type": "object",
-                "properties": {
-                  "_id": {
-                    "type": "string",
-                    "example": "aasdfdfd77979797sd9f797sdf",
-                    "description": "User ID"
-                  },
-                  "name": {
-                    "type": "string",
-                    "example": "Goose",
-                    "description": "User Name"
-                  },
-                  "avatarURL": {
-                    "type": "string",
-                    "example": "https://stig89.github.io/GooseTrack-frontend/static/media/GooseLogo@2x.3c0470b19aa18aaef0d8.png"
-                  }
-                }
-              }
-            }
+            "$ref": "#/components/schemas/getReview"
           }
         }
       },
 
-      "updateReviewRequest": {
+      "deleteOwnReviewResponse": {
         "type": "object",
         "properties": {
-          "rating": {
-            "type": "number",
-            "description": "Rating."
-          },
-          "comment": {
+          "status": {
             "type": "string",
-            "description": "Comment",
-            "example": "GooseTrack the best!"
+            "example": "OK"
+          },
+          "code": {
+            "type": "integer",
+            "example": 200
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "message": {
+                "type": "string",
+                "example": "Review deleted"
+              }
+            }
           }
         }
       },
