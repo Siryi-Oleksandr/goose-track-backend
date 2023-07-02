@@ -24,7 +24,7 @@ interface RequestBody {
   password: string;
   name?: string;
   phone?: string;
-  skype?: string;
+  telegram?: string;
   birthday?: string;
   avatarURL: string;
 }
@@ -52,7 +52,7 @@ const register = controllerWrapper(async (req: Request, res: Response) => {
     password: hashedPassword,
     avatarURL,
     phone: "",
-    skype: "",
+    telegram: "",
     birthday: "",
   });
 
@@ -66,7 +66,7 @@ const register = controllerWrapper(async (req: Request, res: Response) => {
       name: newUser.name,
       email: newUser.email,
       phone: newUser.phone,
-      skype: newUser.skype,
+      telegram: newUser.telegram,
       birthday: newUser.birthday,
       avatarURL: newUser.avatarURL,
     },
@@ -96,7 +96,7 @@ const login = controllerWrapper(async (req: Request, res: Response) => {
       name: user.name,
       email: user.email,
       phone: user.phone,
-      skype: user.skype,
+      telegram: user.telegram,
       birthday: user.birthday,
       avatarURL: user.avatarURL,
     },
@@ -150,7 +150,7 @@ const getCurrentUser = controllerWrapper(async (req: any, res: Response) => {
     email,
     name,
     phone,
-    skype,
+    telegram,
     birthday,
     avatarURL,
     accessToken,
@@ -159,7 +159,7 @@ const getCurrentUser = controllerWrapper(async (req: any, res: Response) => {
   res.json({
     accessToken,
     refreshToken,
-    user: { email, name, phone, skype, birthday, avatarURL },
+    user: { email, name, phone, telegram, birthday, avatarURL },
   });
 });
 

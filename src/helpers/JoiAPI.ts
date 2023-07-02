@@ -11,7 +11,6 @@ class JoiAPI {
   private timeRegexp: RegExp = /^([01]\d|2[0-3]):[0-5]\d$/;
   private phoneRegexp: RegExp =
     /^(\d{2})\s\((\d{3})\)\s(\d{3})\s(\d{2})\s(\d{2})$/;
-  private skypeNumberRegexp: RegExp = /^\+[1-9]\d{0,2}[.-]?\d{1,14}$/;
   private birthdayRegexp: RegExp = /^\d{2}\/\d{2}\/\d{4}$/;
 
   //* Class methods
@@ -98,10 +97,6 @@ class JoiAPI {
       "number.min": "Number of 'rating' must be between 1 and 5",
       "number.max": "Number of 'rating' must be between 1 and 5",
     }),
-
-    // date: Joi.string()
-    //   .required()
-    //   .messages({ "any.required": "Missing required 'end time' field" }),
   });
 
   public updateUserSchema = Joi.object({
@@ -124,13 +119,7 @@ class JoiAPI {
           "The phone number format is incorrect. Please enter in the format 'XX (XXX) XXX XX XX'",
       }),
 
-    skype: Joi.string()
-      .allow("")
-      .pattern(new RegExp(this.skypeNumberRegexp))
-      .messages({
-        "string.pattern.base":
-          "The skype number format is incorrect. Please enter in the format +XX-XXX-XXX-XX-XX",
-      }),
+    telegram: Joi.string().allow(""),
 
     birthday: Joi.string()
       .allow("")

@@ -1669,7 +1669,7 @@
                     "type": "string",
                     "example": ""
                   },
-                  "skype": {
+                  "telegram": {
                     "type": "string",
                     "example": ""
                   },
@@ -1744,7 +1744,7 @@
                     "type": "string",
                     "example": ""
                   },
-                  "skype": {
+                  "telegram": {
                     "type": "string",
                     "example": ""
                   },
@@ -1856,9 +1856,9 @@
             "type": "string",
             "description": "User's phone"
           },
-          "skype": {
+          "telegram": {
             "type": "string",
-            "description": "User's skype"
+            "description": "User's telegram"
           },
           "birthday": {
             "type": "string",
@@ -1868,7 +1868,7 @@
         "example": {
           "name": "Alexander Doe",
           "email": "example@example.com",
-          "skype": "+10888888888",
+          "telegram": "https://t.me/Alex_Doe",
           "phone": "38 (073) 000 00 00",
           "birthday": "24/08/1991"
         }
@@ -1905,9 +1905,9 @@
                 "type": "string",
                 "description": "User's phone"
               },
-              "skype": {
+              "telegram": {
                 "type": "string",
-                "description": "User's skype"
+                "description": "User's telegram"
               },
               "birthday": {
                 "type": "string",
@@ -1918,7 +1918,7 @@
               "_id": "6479dbb972171cebb39e9dc4",
               "name": "Alexander Doe",
               "email": "example@example.com",
-              "skype": "+10888888888",
+              "telegram": "https://t.me/Alex_Doe",
               "phone": "38 (073) 000 00 00",
               "birthday": "24/08/1991",
               "avatarUrl": "http://res.cloudinary.com/dsjxdktiz/image/upload/v1688133681/goose-track/iohp56kfliwlgfhyi0qg.jpg"
