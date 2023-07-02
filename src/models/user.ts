@@ -9,7 +9,7 @@ interface IUser extends Document {
   email: string;
   password: string;
   phone?: string;
-  skype?: string;
+  telegram?: string;
   birthday?: string;
   avatarURL?: string;
   avatarID?: string;
@@ -42,7 +42,7 @@ const userSchema = new Schema<IUser>(
       default: "",
     },
 
-    skype: {
+    telegram: {
       type: String,
       default: "",
     },
