@@ -385,7 +385,7 @@
           }
         ],
         "requestBody": {
-          "description": "User info and avatar upload",
+          "description": "User info and avatar upload. Max file size 2 Mb. File format are png, jpg. Required fields are: name, email",
           "required": true,
           "content": {
             "multipart/form-data": {
