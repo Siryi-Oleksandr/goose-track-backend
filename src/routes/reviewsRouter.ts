@@ -7,7 +7,7 @@ import {
   removeReview,
 } from "../controllers/reviewsControllers";
 import { isValidBody, auth } from "../middlewares";
-import { joiAPI } from "../helpers";
+import { joiAPI } from "../schemes/JoiAPI";
 
 const router = express.Router();
 router.get("/", getReviews);

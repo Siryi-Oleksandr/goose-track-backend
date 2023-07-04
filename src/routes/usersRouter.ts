@@ -9,7 +9,7 @@ import {
   changePassword,
   googleAuth,
 } from "../controllers/userControllers";
-import { joiAPI } from "../helpers";
+import { joiAPI } from "../schemes/JoiAPI";
 import { isValidBody, auth, upload, passport } from "../middlewares";
 
 const router = express.Router();

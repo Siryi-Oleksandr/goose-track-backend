@@ -84,9 +84,15 @@ const removeTask = controllerWrapper(async (req: any, res: Response) => {
 const updateTaskCategory = controllerWrapper(
   async (req: any, res: Response) => {
     const { taskId } = req.params;
-    const task = await TaskModel.findByIdAndUpdate(taskId, req.body, {
-      new: true,
-    });
+    const { _id: owner } = req.user;
+
+    const task = await TaskModel.findOneAndUpdate(
+      { _id: taskId, owner },
+      req.body,
+      {
+        new: true,
+      }
+    );
     if (!task) {
       throw new HttpError(404, `Task with "${taskId}" not found`);
     }
