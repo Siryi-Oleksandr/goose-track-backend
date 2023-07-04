@@ -2,9 +2,9 @@ import dotenv from "dotenv";
 dotenv.config();
 import app from "./app";
 import mongoose from "mongoose";
-// import swaggerUi from "swagger-ui-express";
 
 const { DB_HOST = "", PORT = 3001 } = process.env;
+
 mongoose
   .connect(DB_HOST)
   .then((): void => {
