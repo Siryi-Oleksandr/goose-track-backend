@@ -11,11 +11,7 @@ import {
 } from "../helpers";
 import UserModel from "../models/user";
 import jwt from "jsonwebtoken";
-const {
-  // ACCESS_TOKEN_SECRET_KEY = "",
-  REFRESH_TOKEN_SECRET_KEY = "",
-  FRONTEND_URL = "",
-} = process.env;
+const { REFRESH_TOKEN_SECRET_KEY = "", FRONTEND_URL = "" } = process.env;
 
 // ******************* API:  /auth  ******************
 

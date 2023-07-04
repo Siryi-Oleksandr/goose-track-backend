@@ -35,9 +35,10 @@ const addTask = controllerWrapper(async (req: any, res: Response) => {
 //* GET /tasks/:taskId
 const getTaskById = controllerWrapper(async (req: any, res: Response) => {
   const { taskId } = req.params;
+  const { _id: owner } = req.user;
 
-  const task = await TaskModel.findById(
-    taskId,
+  const task = await TaskModel.find(
+    { _id: taskId, owner },
     "-createdAt -updatedAt"
   ).populate("owner", "name email avatarURL");
 
@@ -50,10 +51,15 @@ const getTaskById = controllerWrapper(async (req: any, res: Response) => {
 //* PATCH /tasks/:taskId
 const updateTask = controllerWrapper(async (req: any, res: Response) => {
   const { taskId } = req.params;
+  const { _id: owner } = req.user;
 
-  const task = await TaskModel.findByIdAndUpdate(taskId, req.body, {
-    new: true,
-  });
+  const task = await TaskModel.findOneAndUpdate(
+    { _id: taskId, owner },
+    req.body,
+    {
+      new: true,
+    }
+  );
 
   if (!task) {
     throw new HttpError(404, `Contact with ${taskId} not found`);
@@ -65,7 +71,9 @@ const updateTask = controllerWrapper(async (req: any, res: Response) => {
 //* DELETE /tasks/:taskId
 const removeTask = controllerWrapper(async (req: any, res: Response) => {
   const { taskId } = req.params;
-  const removedTask = await TaskModel.findByIdAndRemove(taskId);
+  const { _id: owner } = req.user;
+
+  const removedTask = await TaskModel.findOneAndRemove({ _id: taskId, owner });
   if (!removedTask) {
     throw new HttpError(404, `Task with "${taskId}" not found`);
   }
@@ -76,9 +84,15 @@ const removeTask = controllerWrapper(async (req: any, res: Response) => {
 const updateTaskCategory = controllerWrapper(
   async (req: any, res: Response) => {
     const { taskId } = req.params;
-    const task = await TaskModel.findByIdAndUpdate(taskId, req.body, {
-      new: true,
-    });
+    const { _id: owner } = req.user;
+
+    const task = await TaskModel.findOneAndUpdate(
+      { _id: taskId, owner },
+      req.body,
+      {
+        new: true,
+      }
+    );
     if (!task) {
       throw new HttpError(404, `Task with "${taskId}" not found`);
     }

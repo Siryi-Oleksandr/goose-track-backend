@@ -9,7 +9,7 @@ import {
   getStatistics,
 } from "../controllers/taskControllers";
 import { isValidId, isValidBody, auth } from "../middlewares";
-import { joiAPI } from "../helpers";
+import { joiAPI } from "../schemes/JoiAPI";
 
 const router = express.Router();
 
