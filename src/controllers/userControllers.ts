@@ -238,10 +238,6 @@ const changePassword = controllerWrapper(async (req: any, res: Response) => {
 const googleAuth = async (req: any, res: Response) => {
   const { _id } = req.user;
 
-  // const payload: {
-  //   _id: string;
-  // } = { _id };
-
   const { accessToken, refreshToken } = assignTokens(req.user);
 
   await UserModel.findByIdAndUpdate(_id, { accessToken, refreshToken });

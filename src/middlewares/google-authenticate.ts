@@ -34,8 +34,10 @@ const googleCallback = async (
     const { email, displayName, picture } = profile;
 
     const user = await UserModel.findOne({ email });
+
     if (user) {
       done(null, user); // login with google + (res.user = user)
+      return;
     }
 
     const password = await bcrypt.hash(nanoid(), 10);
