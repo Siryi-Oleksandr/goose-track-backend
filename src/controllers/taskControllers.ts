@@ -24,6 +24,12 @@ const getTasks = controllerWrapper(async (req: any, res: Response) => {
 //* POST /tasks
 const addTask = controllerWrapper(async (req: any, res: Response) => {
   const { _id: owner } = req.user;
+  const { start, end } = req.body;
+
+  if (!dateServise.isLaterEndTime(start, end)) {
+    throw new HttpError(400, `Start time can't be in later then end time`);
+  }
+
   const task = await TaskModel.create({
     ...req.body,
     owner,
@@ -52,6 +58,11 @@ const getTaskById = controllerWrapper(async (req: any, res: Response) => {
 const updateTask = controllerWrapper(async (req: any, res: Response) => {
   const { taskId } = req.params;
   const { _id: owner } = req.user;
+  const { start, end } = req.body;
+
+  if (!dateServise.isLaterEndTime(start, end)) {
+    throw new HttpError(400, `Start time can't be in later then end time`);
+  }
 
   const task = await TaskModel.findOneAndUpdate(
     { _id: taskId, owner },
