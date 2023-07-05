@@ -8,6 +8,7 @@ import {
   controllerWrapper,
   cloudinaryAPI,
   handleAvatar,
+  dateServise,
 } from "../helpers";
 import UserModel from "../models/user";
 import jwt from "jsonwebtoken";
@@ -162,12 +163,15 @@ const getCurrentUser = controllerWrapper(async (req: any, res: Response) => {
 //* PATCH /update
 const update = controllerWrapper(async (req: any, res: Response) => {
   const { _id, avatarID, avatarURL, email } = req.user;
-  const { email: newEmail } = req.body;
+  const { email: newEmail, birthday } = req.body;
 
   const existedUser = await UserModel.findOne({ email: newEmail });
 
   if (existedUser && email !== newEmail) {
     throw new HttpError(409, `Email "${newEmail}" already exists`);
+  }
+  if (birthday && dateServise.isFutureDate(birthday)) {
+    throw new HttpError(400, `Birthday can't be in the future`);
   }
 
   let newAvatarURL = avatarURL;
