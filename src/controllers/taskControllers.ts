@@ -144,10 +144,3 @@ export {
   updateTaskCategory,
   getStatistics,
 };
-
-// GET https://goose-track-verq.onrender.com/tasks/ - отримати таски
-// GET https://goose-track-verq.onrender.com/tasks/?page=1&limit=10 - отримати таски з пагінацією
-// POST https://goose-track-verq.onrender.com/tasks - додати таску
-// GET https://goose-track-verq.onrender.com/tasks/:taskID - отримати конкретну таску
-// PATCH  https://goose-track-verq.onrender.com/tasks/:taskID - змінити  конкретну таску
-// DELETE  https://goose-track-verq.onrender.com/tasks/:taskID - видалити конкретну таску
